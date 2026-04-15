@@ -8,6 +8,7 @@ import Reading from './components/Reading'
 import Notes from './components/Notes'
 import NotePage from './components/NotePage'
 import ProjectPage from './components/ProjectPage'
+import BuildFeed from './components/BuildFeed'
 
 function NotePageWrapper() {
   const { slug } = useParams<{ slug: string }>()
@@ -20,7 +21,7 @@ function App() {
       <Header />
       <main>
       <Routes>
-        <Route path="/" element={<About />} />
+        <Route path="/" element={<><About /><BuildFeed /></>} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/reading" element={<Reading />} />
         <Route path="/notes" element={<Notes />} />

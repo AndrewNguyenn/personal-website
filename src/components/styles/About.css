@@ -21,12 +21,14 @@
 }
 
 .avatar-name {
-  font-family: Georgia, 'Times New Roman', serif;
+  animation: fade-in-down 0.4s ease both;
+  animation-delay: 0s;
+  font-family: var(--serif);
   font-size: 52px;
   font-weight: 400;
   line-height: 1;
   letter-spacing: -1px;
-  color: rgba(42, 157, 143, 0.72);
+  color: var(--accent-alt);
   padding-bottom: 12px;
   white-space: nowrap;
 
@@ -36,6 +38,8 @@
 }
 
 .avatar {
+  animation: fade-in-down 0.4s ease both;
+  animation-delay: 0.1s;
   display: block;
   height: 280px;
   width: auto;
@@ -58,9 +62,11 @@
 }
 
 .about-body {
+  animation: fade-in-down 0.4s ease both;
+  animation-delay: 0.2s;
   p {
-    font-size: 16px;
-    line-height: 175%;
+    font-size: var(--fs-lg);
+    line-height: var(--lh-relaxed);
     color: var(--text);
     margin: 0;
   }

@@ -1,3 +1,4 @@
+import React from 'react'
 import './styles/Reading.css'
 
 const books = [
@@ -27,13 +28,14 @@ export default function Reading() {
         used to continuously improve AI product engineering.
       </p>
       <div className="book-list">
-        {books.map((book) => (
+        {books.map((book, i) => (
           <a
             key={book.isbn}
             href={book.amazonUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="book-card"
+            style={{ '--delay': `${i * 0.1}s` } as React.CSSProperties}
           >
             <img
               src={`https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`}

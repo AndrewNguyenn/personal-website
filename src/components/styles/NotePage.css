@@ -13,15 +13,15 @@
 }
 
 .note-page-date {
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--text);
   margin: 0;
 }
 
 .note-page-body {
   p {
-    font-size: 15px;
-    line-height: 175%;
+    font-size: var(--fs-md);
+    line-height: var(--lh-relaxed);
     color: var(--text);
     margin: 0 0 16px;
   }

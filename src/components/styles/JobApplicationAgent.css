@@ -8,19 +8,6 @@
   }
 }
 
-.back-link {
-  display: inline-block;
-  font-size: 13px;
-  color: var(--text);
-  text-decoration: none;
-  margin-bottom: 40px;
-  transition: color 0.2s;
-
-  &:hover {
-    color: var(--accent);
-  }
-}
-
 .agent-header {
   margin-bottom: 48px;
 
@@ -30,14 +17,14 @@
 }
 
 .agent-date {
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--text);
   margin: 0;
 }
 
 .agent-subtitle {
-  font-size: 16px;
-  line-height: 160%;
+  font-size: var(--fs-lg);
+  line-height: var(--lh-normal);
   color: var(--text);
   margin: 0;
   max-width: 560px;
@@ -49,24 +36,24 @@
   gap: 12px;
 
   h3 {
-    font-size: 15px;
+    font-size: var(--fs-md);
     font-weight: 600;
     color: var(--text-h);
     margin: 24px 0 0;
   }
 
   p {
-    font-size: 15px;
-    line-height: 175%;
+    font-size: var(--fs-md);
+    line-height: var(--lh-relaxed);
     color: var(--text);
     margin: 0;
   }
 
   code {
-    font-size: 13px;
+    font-size: var(--fs-sm);
     background: var(--code-bg);
     padding: 2px 6px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     color: var(--text-h);
   }
 }

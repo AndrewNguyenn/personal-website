@@ -29,10 +29,12 @@
   gap: 8px;
   padding: 24px;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   text-decoration: none;
   background: var(--social-bg);
-  transition: box-shadow 0.2s, border-color 0.2s;
+  transition: box-shadow var(--duration), border-color var(--duration);
+  animation: fade-in-down 0.4s ease both;
+  animation-delay: var(--delay, 0s);
 
   &:hover {
     box-shadow: var(--shadow);
@@ -53,7 +55,7 @@
 }
 
 .project-name {
-  font-size: 16px;
+  font-size: var(--fs-lg);
   font-weight: 600;
   color: var(--text-h);
 }
@@ -63,19 +65,19 @@
   height: 16px;
   color: var(--text);
   flex-shrink: 0;
-  transition: color 0.2s, transform 0.2s;
+  transition: color var(--duration), transform var(--duration);
 }
 
 .project-tagline {
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 500;
   color: var(--accent);
   margin: 0;
 }
 
 .project-description {
-  font-size: 14px;
-  line-height: 165%;
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
   color: var(--text);
   margin: 4px 0 0;
 }
@@ -88,9 +90,9 @@
 }
 
 .tag {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   padding: 3px 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--accent-bg);
   color: var(--accent);
   font-weight: 500;

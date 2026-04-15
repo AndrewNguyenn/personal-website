@@ -9,19 +9,6 @@
   }
 }
 
-.back-link {
-  display: inline-block;
-  font-size: 13px;
-  color: var(--text);
-  text-decoration: none;
-  margin-bottom: 28px;
-  transition: color 0.2s;
-
-  &:hover {
-    color: var(--accent);
-  }
-}
-
 .project-page-header {
   margin-bottom: 32px;
 
@@ -39,8 +26,8 @@
 }
 
 .project-page-subtitle {
-  font-size: 15px;
-  line-height: 160%;
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
   color: var(--text);
   margin: 0;
   max-width: 100%;
@@ -53,8 +40,8 @@
 
   p {
     max-width: 100%;
-    font-size: 15px;
-    line-height: 180%;
+    font-size: var(--fs-md);
+    line-height: var(--lh-relaxed);
     color: var(--text);
     margin: 0;
   }
@@ -71,10 +58,10 @@
   }
 
   code {
-    font-size: 13px;
+    font-size: var(--fs-sm);
     background: var(--code-bg);
     padding: 2px 6px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     color: var(--text-h);
   }
 }

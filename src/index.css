@@ -1,15 +1,18 @@
 :root {
+  /* Colors */
   --text: #374151;
   --text-h: #111827;
   --bg: #ffffff;
   --border: #e5e7eb;
   --code-bg: #f3f4f6;
   --accent: #4d7c5e;
+  --accent-alt: rgba(42, 157, 143, 0.72);
   --accent-bg: rgba(77, 124, 94, 0.08);
   --accent-border: rgba(77, 124, 94, 0.4);
   --social-bg: rgba(243, 244, 246, 0.8);
   --shadow:
     rgba(17, 24, 39, 0.08) 0 10px 15px -3px, rgba(17, 24, 39, 0.04) 0 4px 6px -2px;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
 
   /* Mermaid diagram colors */
   --mermaid-node-bg: #f0ebe0;
@@ -18,9 +21,34 @@
   --mermaid-edge-bg: #ffffff;
   --mermaid-edge-text: #111827;
 
+  /* Fonts */
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
+  --serif: Georgia, 'Times New Roman', serif;
+
+  /* Font sizes */
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-base: 14px;
+  --fs-md: 15px;
+  --fs-lg: 16px;
+
+  /* Line heights */
+  --lh-tight: 118%;
+  --lh-code: 135%;
+  --lh-normal: 160%;
+  --lh-relaxed: 175%;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+
+  /* Transitions */
+  --duration: 0.2s;
+  --duration-slow: 0.3s;
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
@@ -48,6 +76,7 @@
     --social-bg: rgba(31, 41, 55, 0.8);
     --shadow:
       rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
 
     --mermaid-node-bg: #1e2a3a;
     --mermaid-node-text: #e2e8f0;
@@ -93,7 +122,7 @@ h1 {
 }
 h2 {
   font-size: 24px;
-  line-height: 118%;
+  line-height: var(--lh-tight);
   letter-spacing: -0.24px;
   margin: 0 0 8px;
   @media (max-width: 1024px) {
@@ -108,13 +137,37 @@ code,
 .counter {
   font-family: var(--mono);
   display: inline-flex;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   color: var(--text-h);
 }
 
 code {
-  font-size: 15px;
-  line-height: 135%;
+  font-size: var(--fs-md);
+  line-height: var(--lh-code);
   padding: 4px 8px;
   background: var(--code-bg);
+}
+
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.back-link {
+  display: inline-block;
+  font-size: var(--fs-sm);
+  color: var(--text);
+  text-decoration: none;
+  margin-bottom: 28px;
+  transition: color var(--duration);
+
+  &:hover {
+    color: var(--accent);
+  }
 }

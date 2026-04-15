@@ -45,11 +45,11 @@ nav {
   a {
     color: var(--text);
     text-decoration: none;
-    font-size: 14px;
+    font-size: var(--fs-base);
     padding: 6px 12px;
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     white-space: nowrap;
-    transition: color 0.2s, background 0.2s;
+    transition: color var(--duration), background var(--duration);
 
     &:hover,
     &.active {
@@ -62,7 +62,7 @@ nav {
     gap: 0;
 
     a {
-      font-size: 13px;
+      font-size: var(--fs-sm);
       padding: 6px 8px;
     }
   }

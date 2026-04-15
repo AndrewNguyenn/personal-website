@@ -10,8 +10,8 @@ footer {
   a {
     color: var(--text);
     text-decoration: none;
-    font-size: 14px;
-    transition: color 0.2s;
+    font-size: var(--fs-base);
+    transition: color var(--duration);
 
     &:hover {
       color: var(--accent);

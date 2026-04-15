@@ -1,3 +1,4 @@
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { projectList } from './projects/index'
 import './styles/Projects.css'
@@ -7,7 +8,8 @@ export default function Projects() {
     <section id="projects">
       <h2>Projects</h2>
       <div className="project-list">
-        {projectList.map((project) => {
+        {projectList.map((project, i) => {
+          const delay = `${i * 0.1}s`
           const inner = (
             <>
               <div className="project-header">
@@ -25,19 +27,19 @@ export default function Projects() {
 
           if (project.component) {
             return (
-              <Link key={project.slug} to={`/projects/${project.slug}`} className="project-card">
+              <Link key={project.slug} to={`/projects/${project.slug}`} className="project-card" style={{ '--delay': delay } as React.CSSProperties}>
                 {inner}
               </Link>
             )
           }
           if (project.url) {
             return (
-              <a key={project.slug} href={project.url} target="_blank" rel="noopener noreferrer" className="project-card">
+              <a key={project.slug} href={project.url} target="_blank" rel="noopener noreferrer" className="project-card" style={{ '--delay': delay } as React.CSSProperties}>
                 {inner}
               </a>
             )
           }
-          return <div key={project.slug} className="project-card">{inner}</div>
+          return <div key={project.slug} className="project-card" style={{ '--delay': delay } as React.CSSProperties}>{inner}</div>
         })}
       </div>
     </section>
