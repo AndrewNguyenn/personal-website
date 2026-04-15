@@ -1,0 +1,51 @@
+#about {
+  padding: 80px 32px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 600px;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    padding: 48px 20px 40px;
+  }
+}
+
+.avatar-stage {
+  position: relative;
+  width: 100%;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.avatar {
+  display: block;
+  height: 280px;
+  width: auto;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 600px) {
+    height: 220px;
+  }
+}
+
+.avatar-shelf {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--border);
+}
+
+.about-body {
+  p {
+    font-size: 16px;
+    line-height: 175%;
+    color: var(--text);
+    margin: 0;
+  }
+}

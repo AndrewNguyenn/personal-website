@@ -1,0 +1,72 @@
+#job-agent {
+  padding: 48px 32px 80px;
+  max-width: 680px;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    padding: 32px 20px 64px;
+  }
+}
+
+.back-link {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+  margin-bottom: 40px;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--accent);
+  }
+}
+
+.agent-header {
+  margin-bottom: 48px;
+
+  h2 {
+    margin: 8px 0 16px;
+  }
+}
+
+.agent-date {
+  font-size: 13px;
+  color: var(--text);
+  margin: 0;
+}
+
+.agent-subtitle {
+  font-size: 16px;
+  line-height: 160%;
+  color: var(--text);
+  margin: 0;
+  max-width: 560px;
+}
+
+.agent-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-h);
+    margin: 24px 0 0;
+  }
+
+  p {
+    font-size: 15px;
+    line-height: 175%;
+    color: var(--text);
+    margin: 0;
+  }
+
+  code {
+    font-size: 13px;
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--text-h);
+  }
+}

@@ -1,0 +1,28 @@
+.mermaid-wrap {
+  width: 100%;
+  overflow: visible;
+  padding: 24px 0;
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Node labels: center text within each node shape */
+  .node .label text,
+  .node text {
+    text-anchor: middle !important;
+  }
+
+  /* Edge labels — solid background, no translucency */
+  .edgeLabel rect {
+    fill: var(--bg) !important;
+    opacity: 1 !important;
+  }
+
+  .edgeLabel text {
+    fill: var(--text-h) !important;
+  }
+}

@@ -1,0 +1,33 @@
+#note-page {
+  padding: 80px 32px 64px;
+  max-width: 600px;
+  margin: 0 auto;
+
+  h2 {
+    margin: 8px 0 40px;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 48px 20px 40px;
+  }
+}
+
+.note-page-date {
+  font-size: 13px;
+  color: var(--text);
+  margin: 0;
+}
+
+.note-page-body {
+  p {
+    font-size: 15px;
+    line-height: 175%;
+    color: var(--text);
+    margin: 0 0 16px;
+  }
+}
+
+.note-empty {
+  color: var(--text);
+  font-style: italic;
+}
