@@ -91,12 +91,13 @@ function tick() {
   }, 200)
 
   if (activity.ships) {
+    const shipDelay = 800 + Math.random() * 8000
     setTimeout(() => {
       updateItems(prev => prev.map(item => item.id === id ? { ...item, status: Status.Shipped, isShipping: true } : item))
       setTimeout(() => {
         updateItems(prev => prev.map(item => item.id === id ? { ...item, isShipping: false } : item))
       }, 700)
-    }, 1800)
+    }, shipDelay)
   }
 
   if (activity.name === 'Interviewing' && Math.random() < 0.95) {
