@@ -10,6 +10,7 @@ export default function Header() {
       <nav>
         <NavLink to="/projects">Projects</NavLink>
         <NavLink to="/reading">Currently Reading</NavLink>
+        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
       </nav>
     </header>
   )
