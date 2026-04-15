@@ -32,10 +32,10 @@ const activities: Activity[] = [
   { name: 'Interviewing',                    status: Status.InProgress },
   { name: 'AWS Wickr Console',               status: Status.Building,   ships: true },
   { name: 'Distributed Inference',           status: Status.Learning  },
-  { name: 'Context Engineering',           status: Status.Learning  },
+  { name: 'Context Engineering',             status: Status.Learning  },
   { name: 'Image Processing Pipeline',       status: Status.Building,   ships: true },
   { name: 'AI Productivity Acceleration',    status: Status.Ideating  },
-  { name: 'Agent Self-Healing',              status: Status.Ideating,   ships:true },
+  { name: 'Agent Self-Healing',              status: Status.Ideating,   ships: true },
   { name: 'ComfyUI on AWS',                  status: Status.Building,   ships: true },
   { name: 'Designing Data-intensive Systems',status: Status.Learning  },
   { name: 'Half Marathon',                   status: Status.Training  },
@@ -50,22 +50,91 @@ const activities: Activity[] = [
 const formatStatus = (s: Status) =>
   s.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')
 
-const MAX      = 4
+const MAX      = 3
 const SLIDE_MS = 360
-
 const blankFlags = { isNew: false, isShipping: false, isFailing: false, isRetrying: false }
 
-export default function BuildFeed() {
-  const [items, setItems] = useState<Item[]>(() =>
-    activities.slice(0, 3).map((a, i) => ({ id: i, name: a.name, status: a.status, ...blankFlags }))
-  )
+// ── Module-level persistent state ─────────────────────────────────────────────
+// Survives component unmount/remount so the feed never resets on navigation.
 
-  const nextId    = useRef(10)
-  const nextIdx   = useRef(3)
+let moduleItems: Item[] = activities.slice(0, 3).map((a, i) => ({
+  id: i, name: a.name, status: a.status, ...blankFlags,
+}))
+let moduleNextId  = 10
+let moduleNextIdx = 3
+
+const subscribers = new Set<() => void>()
+
+function updateItems(updater: (prev: Item[]) => Item[]) {
+  moduleItems = updater(moduleItems)
+  subscribers.forEach(fn => fn())
+}
+
+function tick() {
+  const id       = moduleNextId++
+  const activity = activities[moduleNextIdx % activities.length]
+  moduleNextIdx++
+
+  updateItems(prev => [
+    { id, name: activity.name, status: activity.status, ...blankFlags, isNew: true },
+    ...prev,
+  ].slice(0, MAX))
+
+  setTimeout(() => {
+    updateItems(prev => prev.map(item => item.id === id ? { ...item, isNew: false } : item))
+  }, SLIDE_MS + 20)
+
+  if (activity.ships) {
+    setTimeout(() => {
+      updateItems(prev => prev.map(item => item.id === id ? { ...item, status: Status.Shipped, isShipping: true } : item))
+      setTimeout(() => {
+        updateItems(prev => prev.map(item => item.id === id ? { ...item, isShipping: false } : item))
+      }, 700)
+    }, 1800)
+  }
+
+  if (activity.name === 'Interviewing' && Math.random() < 0.95) {
+    setTimeout(() => {
+      updateItems(prev => prev.map(item => item.id === id ? { ...item, status: Status.Failed, isFailing: true } : item))
+      setTimeout(() => {
+        updateItems(prev => prev.map(item => item.id === id ? { ...item, isFailing: false } : item))
+      }, 700)
+      setTimeout(() => {
+        updateItems(prev => prev.map(item => item.id === id ? { ...item, status: Status.Retrying, isRetrying: true } : item))
+        setTimeout(() => {
+          updateItems(prev => prev.map(item => item.id === id ? { ...item, isRetrying: false } : item))
+        }, 700)
+      }, 2500)
+    }, 2000)
+  }
+}
+
+// Start the ticker once at module load — keeps running across navigations.
+setInterval(tick, 3200)
+
+// ── Component ──────────────────────────────────────────────────────────────────
+
+export default function BuildFeed() {
+  const [items, setItems] = useState<Item[]>(() => moduleItems)
+
   const rowRefs   = useRef<Map<number, HTMLDivElement>>(new Map())
   const snapshots = useRef<Map<number, number> | null>(null)
 
-  // FLIP: slide existing rows down smoothly after new item is prepended
+  // Subscribe to module-level updates, capturing FLIP snapshots before each render.
+  useEffect(() => {
+    const handler = () => {
+      const positions = new Map<number, number>()
+      rowRefs.current.forEach((el, id) => {
+        positions.set(id, el.getBoundingClientRect().top)
+      })
+      snapshots.current = positions
+      setItems(moduleItems)
+    }
+    subscribers.add(handler)
+    return () => { subscribers.delete(handler) }
+  }, [])
+
+  // FLIP: slide existing rows down after a new item is prepended.
   useLayoutEffect(() => {
     if (!snapshots.current) return
     const before = snapshots.current
@@ -74,78 +143,24 @@ export default function BuildFeed() {
     rowRefs.current.forEach((el, id) => {
       const oldTop = before.get(id)
       if (oldTop === undefined) return
-
       const delta = oldTop - el.getBoundingClientRect().top
       if (delta === 0) return
 
       el.style.transition = 'none'
       el.style.transform  = `translateY(${delta}px)`
       void el.offsetHeight
-
       el.style.transition = `transform ${SLIDE_MS}ms cubic-bezier(0.16, 1, 0.3, 1)`
       el.style.transform  = ''
-
       el.addEventListener('transitionend', () => { el.style.transition = '' }, { once: true })
     })
   }, [items])
 
-  useEffect(() => {
-    const run = () => {
-      const id       = nextId.current++
-      const activity = activities[nextIdx.current % activities.length]
-      nextIdx.current++
-
-      const positions = new Map<number, number>()
-      rowRefs.current.forEach((el, itemId) => {
-        positions.set(itemId, el.getBoundingClientRect().top)
-      })
-      snapshots.current = positions
-
-      setItems(prev => [{ id, name: activity.name, status: activity.status, ...blankFlags, isNew: true }, ...prev].slice(0, MAX))
-
-      setTimeout(() => {
-        setItems(prev => prev.map(item => item.id === id ? { ...item, isNew: false } : item))
-      }, SLIDE_MS + 20)
-
-      if (activity.ships) {
-        setTimeout(() => {
-          setItems(prev => prev.map(item => item.id === id ? { ...item, status: Status.Shipped, isShipping: true } : item))
-          setTimeout(() => {
-            setItems(prev => prev.map(item => item.id === id ? { ...item, isShipping: false } : item))
-          }, 700)
-        }, 1800)
-      }
-
-      // ~95% chance Interviewing fails
-      if (activity.name === 'Interviewing' && Math.random() < 0.95) {
-        setTimeout(() => {
-          // Pulse red + show ✕ Failed
-          setItems(prev => prev.map(item => item.id === id ? { ...item, status: Status.Failed, isFailing: true } : item))
-          // Clear pulse after animation
-          setTimeout(() => {
-            setItems(prev => prev.map(item => item.id === id ? { ...item, isFailing: false } : item))
-          }, 700)
-          // Stay Failed for ~2.5s total, then pulse green into Retrying
-          setTimeout(() => {
-            setItems(prev => prev.map(item => item.id === id ? { ...item, status: Status.Retrying, isRetrying: true } : item))
-            setTimeout(() => {
-              setItems(prev => prev.map(item => item.id === id ? { ...item, isRetrying: false } : item))
-            }, 700)
-          }, 2500)
-        }, 2000)
-      }
-    }
-
-    const timer = setInterval(run, 3200)
-    return () => clearInterval(timer)
-  }, [])
-
   return (
     <section id="build-feed">
-      <h2>In Progress</h2>
-      <p className="feed-subtitle">
-        Something's always happening...
-      </p>
+      <div className="feed-header">
+        <h2>In Progress</h2>
+        <p className="feed-subtitle">Something's always happening...</p>
+      </div>
       <div className="feed-panel">
         {items.map((item) => (
           <div

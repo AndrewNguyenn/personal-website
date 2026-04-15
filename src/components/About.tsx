@@ -1,11 +1,15 @@
 import './styles/About.css'
 import avatar from '/avatar.png'
+import BuildFeed from './BuildFeed'
 
 export default function About() {
   return (
     <section id="about">
       <div className="avatar-stage">
-        <div className="avatar-name">Andrew Nguyen</div>
+        <div className="avatar-left">
+          <BuildFeed />
+          <div className="avatar-name">Andrew Nguyen</div>
+        </div>
         <img src={avatar} alt="Andrew" className="avatar" />
         <div className="avatar-shelf" />
       </div>

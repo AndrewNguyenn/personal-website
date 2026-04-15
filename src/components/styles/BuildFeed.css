@@ -17,15 +17,19 @@
   max-width: 600px;
   margin: 0 auto;
 
-  h2 {
-    margin: 0 0 8px;
-    width: 100%;
-    animation: fade-in-down 0.4s ease both;
-    animation-delay: 0s;
-  }
-
   @media (max-width: 1024px) {
     padding: 40px 20px;
+  }
+}
+
+.feed-header {
+  width: 100%;
+  margin-bottom: 32px;
+
+  h2 {
+    margin: 0 0 8px;
+    animation: fade-in-down 0.4s ease both;
+    animation-delay: 0s;
   }
 }
 
@@ -33,7 +37,7 @@
   font-size: var(--fs-md);
   color: var(--text);
   line-height: var(--lh-normal);
-  margin: 0 0 32px;
+  margin: 0;
   width: 100%;
   animation: fade-in-down 0.4s ease both;
   animation-delay: 0.1s;
