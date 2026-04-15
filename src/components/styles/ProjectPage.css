@@ -59,6 +59,17 @@
     margin: 0;
   }
 
+  a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 0.75;
+    }
+  }
+
   code {
     font-size: 13px;
     background: var(--code-bg);

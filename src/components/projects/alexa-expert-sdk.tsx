@@ -73,7 +73,7 @@ export default function AlexaExpertSDK() {
         </p>
         <MermaidDiagram chart={DIAGRAM_OUTCOME} />
         <p>
-          On the Developer AI tech team, I built the SDK that made this pattern possible for
+          On the Developer AI tech team, I built the <a href="https://developer.amazon.com/en-US/alexa/alexa-skills-kit/get-deeper/sdk" target="_blank" rel="noopener noreferrer">SDK</a> that made this pattern possible for
           external partners. Partners like Thumbtack and TaskRabbit could register their service
           endpoints and define how Alexa should interact with their platform. From there, Alexa
           could navigate their websites in natural language — interpreting available slots,
