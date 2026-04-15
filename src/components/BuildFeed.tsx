@@ -19,6 +19,7 @@ type Item     = {
   id:         number
   name:       string
   status:     Status
+  isPending:  boolean
   isNew:      boolean
   isShipping: boolean
   isFailing:  boolean
@@ -52,7 +53,7 @@ const formatStatus = (s: Status) =>
 
 const MAX      = 3
 const SLIDE_MS = 360
-const blankFlags = { isNew: false, isShipping: false, isFailing: false, isRetrying: false }
+const blankFlags = { isPending: false, isNew: false, isShipping: false, isFailing: false, isRetrying: false }
 
 // ── Module-level persistent state ─────────────────────────────────────────────
 // Survives component unmount/remount so the feed never resets on navigation.
@@ -75,14 +76,19 @@ function tick() {
   const activity = activities[moduleNextIdx % activities.length]
   moduleNextIdx++
 
+  // Phase 1: add invisible placeholder so existing rows FLIP-slide down
   updateItems(prev => [
-    { id, name: activity.name, status: activity.status, ...blankFlags, isNew: true },
+    { id, name: activity.name, status: activity.status, ...blankFlags, isPending: true },
     ...prev,
   ].slice(0, MAX))
 
+  // Phase 2: after slide finishes, bubble the new item in
   setTimeout(() => {
-    updateItems(prev => prev.map(item => item.id === id ? { ...item, isNew: false } : item))
-  }, SLIDE_MS + 20)
+    updateItems(prev => prev.map(item => item.id === id ? { ...item, isPending: false, isNew: true } : item))
+    setTimeout(() => {
+      updateItems(prev => prev.map(item => item.id === id ? { ...item, isNew: false } : item))
+    }, 500)
+  }, 200)
 
   if (activity.ships) {
     setTimeout(() => {
@@ -173,7 +179,8 @@ export default function BuildFeed() {
               'feed-row',
               item.status !== Status.Shipped && item.status !== Status.Failed ? 'feed-row--active' : '',
               item.status === Status.Failed ? 'feed-row--failed' : '',
-              item.isNew      ? 'feed-row--new'      : '',
+              item.isPending  ? 'feed-row--pending'   : '',
+              item.isNew      ? 'feed-row--new'       : '',
               item.isShipping ? 'feed-row--shipping'  : '',
               item.isFailing  ? 'feed-row--failing'   : '',
               item.isRetrying ? 'feed-row--retrying'  : '',
