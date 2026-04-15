@@ -16,7 +16,23 @@
   width: 100%;
   margin-bottom: 40px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.avatar-name {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 52px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: rgba(42, 157, 143, 0.72);
+  padding-bottom: 12px;
+  white-space: nowrap;
+
+  @media (max-width: 600px) {
+    font-size: 34px;
+  }
 }
 
 .avatar {

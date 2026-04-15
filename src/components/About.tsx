@@ -5,6 +5,7 @@ export default function About() {
   return (
     <section id="about">
       <div className="avatar-stage">
+        <div className="avatar-name">Andrew Nguyen</div>
         <img src={avatar} alt="Andrew" className="avatar" />
         <div className="avatar-shelf" />
       </div>
