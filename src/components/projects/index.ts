@@ -20,6 +20,15 @@ export const projectList: ProjectEntry[] = [
   { ...jobMeta, component: JobApplicationAgent },
   { ...alexaMeta, component: AlexaExpertSDK },
   {
+    slug: 'schedule-portal',
+    name: 'Schedule Portal',
+    tagline: 'Hospital schedule photos → Google Calendar events',
+    description:
+      "My girlfriend is a DTR at a children's hospital. Every week her floor posts a new schedule — different shifts, different days — and she'd take a picture of it with her phone. Then every day she'd open her camera roll just to check when she worked next. So I built a portal where she uploads the photo, and it runs through Google Cloud Vision OCR, parses out her shifts, and automatically populates a shared Google Calendar.",
+    tags: ['Python', 'Google Cloud Vision', 'Google Calendar API', 'GCP', 'OAuth 2.0'],
+    url: 'https://github.com/AndrewNguyenn/schedule-portal',
+  },
+  {
     slug: 'comfyui-on-aws',
     name: 'ComfyUI on AWS',
     tagline: 'One-command cloud workstation for image generation',
