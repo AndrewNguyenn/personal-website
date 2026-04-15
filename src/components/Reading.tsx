@@ -1,4 +1,4 @@
-import './Reading.css'
+import './styles/Reading.css'
 
 const books = [
   {

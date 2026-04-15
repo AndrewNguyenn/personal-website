@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import mermaid from 'mermaid'
-import './MermaidDiagram.css'
+import './styles/MermaidDiagram.css'
+
+const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
 
 mermaid.initialize({
   startOnLoad: false,
@@ -11,19 +13,33 @@ mermaid.initialize({
     htmlLabels: false,
     padding: 20,
   },
-  themeVariables: {
-    primaryColor: '#f0ebe0',
-    primaryTextColor: '#2e1f0e',
-    primaryBorderColor: '#c4692a',
-    lineColor: '#c4692a',
-    secondaryColor: '#f5f0e8',
-    tertiaryColor: '#f5f0e8',
-    edgeLabelBackground: '#f9fafb',
-    fontFamily: 'system-ui, Segoe UI, Roboto, sans-serif',
-    fontSize: '14px',
-    nodeBorder: '#c4692a',
-    clusterBkg: '#f5f0e8',
-  },
+  themeVariables: darkMode
+    ? {
+        primaryColor: '#1e2a3a',
+        primaryTextColor: '#e2e8f0',
+        primaryBorderColor: '#c4692a',
+        lineColor: '#c4692a',
+        secondaryColor: '#1a2535',
+        tertiaryColor: '#1a2535',
+        edgeLabelBackground: '#111827',
+        fontFamily: 'system-ui, Segoe UI, Roboto, sans-serif',
+        fontSize: '14px',
+        nodeBorder: '#c4692a',
+        clusterBkg: '#1a2535',
+      }
+    : {
+        primaryColor: '#f0ebe0',
+        primaryTextColor: '#2e1f0e',
+        primaryBorderColor: '#c4692a',
+        lineColor: '#c4692a',
+        secondaryColor: '#f5f0e8',
+        tertiaryColor: '#f5f0e8',
+        edgeLabelBackground: '#ffffff',
+        fontFamily: 'system-ui, Segoe UI, Roboto, sans-serif',
+        fontSize: '14px',
+        nodeBorder: '#c4692a',
+        clusterBkg: '#f5f0e8',
+      },
 })
 
 interface Props {
@@ -82,9 +98,11 @@ export default function MermaidDiagram({ chart }: Props) {
           fo.setAttribute('width', String(newW))
           fo.setAttribute('height', String(newH))
 
-          // Re-center the label group on the original node-center point
-          const newX = centerX - newW / 2
-          const newY = centerY - newH / 2
+          // The div (display:table-cell) starts at (0,0) in the foreignObject and is
+          // content-sized, so center the label group on the div's bounds — not the
+          // foreignObject's bounds (which includes the breathing-room padding).
+          const newX = centerX - contentW / 2
+          const newY = centerY - contentH / 2
           labelG.setAttribute('transform', `translate(${newX}, ${newY})`)
         })
 

@@ -16,13 +16,13 @@
     text-anchor: middle !important;
   }
 
-  /* Edge labels — solid background, no translucency */
+  /* Edge labels — use theme-aware colors so they're readable in dark mode */
   .edgeLabel rect {
-    fill: var(--bg) !important;
+    fill: var(--mermaid-edge-bg) !important;
     opacity: 1 !important;
   }
 
   .edgeLabel text {
-    fill: var(--text-h) !important;
+    fill: var(--mermaid-edge-text) !important;
   }
 }

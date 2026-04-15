@@ -1,4 +1,4 @@
-import './About.css'
+import './styles/About.css'
 import avatar from '/avatar.png'
 
 export default function About() {
@@ -10,10 +10,10 @@ export default function About() {
       </div>
       <div className="about-body">
         <p>
-          Software engineer, six years in, no CS degree — just figured it out as I went.
-          A friend at Anthropic handed me an AI engineering book and it kind of broke my brain in a
-          good way. Now I spend most of my time thinking about how to build the infrastructure that
-          makes AI agents actually do what you want them to do. Still figuring it out, honestly.
+          Software engineer, six years in, currently building agents at Alexa.
+          A friend handed me an AI engineering book and it unlocked a world of possibilities.
+          Now I spend most of my time thinking about how to build the infrastructure that
+          makes AI agents actually do what you want them to do. Always learning.
         </p>
       </div>
     </section>

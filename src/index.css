@@ -11,13 +11,20 @@
   --shadow:
     rgba(17, 24, 39, 0.08) 0 10px 15px -3px, rgba(17, 24, 39, 0.04) 0 4px 6px -2px;
 
+  /* Mermaid diagram colors */
+  --mermaid-node-bg: #f0ebe0;
+  --mermaid-node-text: #2e1f0e;
+  --mermaid-node-border: #c4692a;
+  --mermaid-edge-bg: #ffffff;
+  --mermaid-edge-text: #111827;
+
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
-  color-scheme: light;
+  color-scheme: light dark;
   color: var(--text);
   background: var(--bg);
   font-synthesis: none;
@@ -27,6 +34,26 @@
 
   @media (max-width: 1024px) {
     font-size: 16px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #111827;
+    --border: #374151;
+    --code-bg: #1f2937;
+    --accent: #6aab82;
+    --accent-bg: rgba(106, 171, 130, 0.1);
+    --accent-border: rgba(106, 171, 130, 0.35);
+    --social-bg: rgba(31, 41, 55, 0.8);
+    --shadow:
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+
+    --mermaid-node-bg: #1e2a3a;
+    --mermaid-node-text: #e2e8f0;
+    --mermaid-node-border: #c4692a;
+    --mermaid-edge-bg: #111827;
+    --mermaid-edge-text: #f3f4f6;
   }
 }
 

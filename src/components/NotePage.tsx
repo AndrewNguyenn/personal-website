@@ -1,4 +1,4 @@
-import './NotePage.css'
+import './styles/NotePage.css'
 
 const content: Record<string, { title: string; date: string; body: string }> = {
   'job-application-agent': {
