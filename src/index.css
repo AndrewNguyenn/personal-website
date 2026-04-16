@@ -161,6 +161,13 @@ code {
   to   { opacity: 0; }
 }
 
+.page-in,
+.page-out {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 .page-in {
   animation: page-fade-in 0.18s ease both;
 }
