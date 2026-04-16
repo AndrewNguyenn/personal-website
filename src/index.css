@@ -2,7 +2,7 @@
   /* Colors */
   --text: #374151;
   --text-h: #111827;
-  --bg: #ffffff;
+  --bg: #f5f5f5;
   --border: #e5e7eb;
   --code-bg: #f3f4f6;
   --accent: #4d7c5e;
@@ -67,7 +67,7 @@
   @media (prefers-color-scheme: dark) {
     --text: #9ca3af;
     --text-h: #f3f4f6;
-    --bg: #111827;
+    --bg: #1c1c1c;
     --border: #374151;
     --code-bg: #1f2937;
     --accent: #7dd4a0;
