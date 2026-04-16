@@ -1,13 +1,15 @@
 #about {
-  padding: 48px 32px 48px;
+  padding: 48px 32px 48px 32px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  width: 100%;
   max-width: 600px;
-  margin: 0 auto;
+  box-sizing: border-box;
+  margin: auto;
 
   @media (max-width: 1024px) {
-    padding: 32px 20px 32px;
+    padding: 32px 20px 32px 20px;
   }
 }
 
@@ -143,10 +145,8 @@
   object-fit: contain;
   position: relative;
   z-index: 1;
-  margin-right: -32px;
 
   @media (max-width: 1024px) {
-    margin-right: -20px;
     height: 220px;
   }
 
@@ -172,6 +172,7 @@
   animation: fade-in-down 0.4s ease both;
   animation-delay: 0.2s;
   text-align: left;
+  width: 100%;
   p {
     font-size: var(--fs-lg);
     line-height: var(--lh-relaxed);
