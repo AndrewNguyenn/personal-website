@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useParams, useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import './App.css'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -14,12 +15,28 @@ function NotePageWrapper() {
   return <NotePage slug={slug ?? ''} />
 }
 
-function App() {
+function AnimatedRoutes() {
+  const location = useLocation()
+  const [displayLocation, setDisplayLocation] = useState(location)
+  const [stage, setStage] = useState<'in' | 'out'>('in')
+
+  useEffect(() => {
+    if (location.pathname !== displayLocation.pathname) {
+      setStage('out')
+    }
+  }, [location.pathname])
+
   return (
-    <BrowserRouter>
-      <Header />
-      <main>
-      <Routes>
+    <div
+      className={`page-${stage}`}
+      onAnimationEnd={() => {
+        if (stage === 'out') {
+          setDisplayLocation(location)
+          setStage('in')
+        }
+      }}
+    >
+      <Routes location={displayLocation}>
         <Route path="/" element={<About />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/reading" element={<Reading />} />
@@ -27,6 +44,16 @@ function App() {
         <Route path="/notes/:slug" element={<NotePageWrapper />} />
         <Route path="/projects/:slug" element={<ProjectPage />} />
       </Routes>
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Header />
+      <main>
+        <AnimatedRoutes />
       </main>
       <Footer />
     </BrowserRouter>

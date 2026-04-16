@@ -45,6 +45,15 @@
 
 #about .feed-panel {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  animation-delay: 0.6s;
+}
+
+#about .feed-header h2 {
+  animation-delay: 0.4s;
+}
+
+#about .feed-subtitle {
+  animation-delay: 0.5s;
 }
 
 #about .feed-header {
