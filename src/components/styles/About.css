@@ -145,9 +145,11 @@
   object-fit: contain;
   position: relative;
   z-index: 1;
+  margin-right: -32px;
 
   @media (max-width: 1024px) {
     height: 220px;
+    margin-right: 0;
   }
 
   @media (max-width: 500px) {
