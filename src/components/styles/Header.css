@@ -4,7 +4,7 @@ header {
   gap: 32px;
   padding: 0 48px;
   height: 68px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid transparent;
   position: fixed;
   top: 0;
   left: 0;

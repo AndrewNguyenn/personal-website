@@ -4,11 +4,11 @@ footer {
   align-items: center;
   gap: 32px;
   padding: 20px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid transparent;
   margin-top: auto;
 
   a {
-    color: var(--text);
+    color: var(--accent-alt);
     text-decoration: none;
     font-size: var(--fs-base);
     transition: color var(--duration);
