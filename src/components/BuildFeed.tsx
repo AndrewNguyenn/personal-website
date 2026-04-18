@@ -94,7 +94,7 @@ function tick() {
   }, 200)
 
   if (activity.deploys) {
-    const deployDelay = 800 + Math.random() * 8000
+    const deployDelay = 1500 + Math.random() * 2500
     setTimeout(() => {
       updateItems(prev => prev.map(item => item.id === id ? { ...item, status: Status.Deploying, isDeploying: true } : item))
       setTimeout(() => {
@@ -198,7 +198,8 @@ export default function BuildFeed() {
               item.isShipping  ? 'feed-row--shipping'   : '',
               item.isFailing   ? 'feed-row--failing'    : '',
               item.isRetrying  ? 'feed-row--retrying'   : '',
-              item.isDeploying ? 'feed-row--deploying'  : '',
+              item.isDeploying                          ? 'feed-row--deploying'        : '',
+              item.status === Status.Deploying          ? 'feed-row--status-deploying' : '',
             ].filter(Boolean).join(' ')}
           >
             <span className="feed-name">{item.name}</span>

@@ -135,21 +135,25 @@
   100% { background: rgba(239, 68, 68, 0.05); }
 }
 
+.feed-row--status-deploying {
+  background: rgba(139, 92, 246, 0.1);
+}
+
 .feed-row--deploying {
-  animation: pulse-deploy 0.65s ease;
+  animation: pulse-deploy 0.65s ease forwards;
 }
 
 @keyframes pulse-deploy {
   0%   { background: var(--accent-bg); }
-  40%  { background: rgba(234, 179, 8, 0.2); }
-  100% { background: var(--accent-bg); }
+  40%  { background: rgba(139, 92, 246, 0.25); }
+  100% { background: rgba(139, 92, 246, 0.1); }
 }
 
 .feed-badge--deploying {
-  color: #a16207;
+  color: #7c3aed;
 
   @media (prefers-color-scheme: dark) {
-    color: #facc15;
+    color: #c4b5fd;
   }
 }
 
