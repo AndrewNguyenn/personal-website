@@ -5,7 +5,7 @@ import '../styles/ProjectPage.css'
 
 export const meta: ProjectMeta = {
   slug: 'bowpress',
-  name: 'BowPress',
+  name: 'BowPress (iOS app)',
   tagline: 'Version control for your bow',
   description:
     "An iOS app I'm building for archers who want to move beyond feel-based tuning. Every session captures both structured shot data and the ephemeral stuff — feel notes, hold quality, tension observations — which get embedded as vectors and correlated against your actual scores and groupings over time.",
