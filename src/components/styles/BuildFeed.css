@@ -135,6 +135,24 @@
   100% { background: rgba(239, 68, 68, 0.05); }
 }
 
+.feed-row--deploying {
+  animation: pulse-deploy 0.65s ease;
+}
+
+@keyframes pulse-deploy {
+  0%   { background: var(--accent-bg); }
+  40%  { background: rgba(234, 179, 8, 0.2); }
+  100% { background: var(--accent-bg); }
+}
+
+.feed-badge--deploying {
+  color: #a16207;
+
+  @media (prefers-color-scheme: dark) {
+    color: #facc15;
+  }
+}
+
 
 /* ── text ───────────────────────────────────────────────── */
 

@@ -10,20 +10,22 @@ const Status = {
   Training:   'training',
   Failed:     'failed',
   Retrying:   'retrying',
+  Deploying:  'deploying',
 } as const
 
 type Status = typeof Status[keyof typeof Status]
 
-type Activity = { name: string; status: Status; ships?: true }
+type Activity = { name: string; status: Status; ships?: true; deploys?: true }
 type Item     = {
-  id:         number
-  name:       string
-  status:     Status
-  isPending:  boolean
-  isNew:      boolean
-  isShipping: boolean
-  isFailing:  boolean
-  isRetrying: boolean
+  id:          number
+  name:        string
+  status:      Status
+  isPending:   boolean
+  isNew:       boolean
+  isShipping:  boolean
+  isFailing:   boolean
+  isRetrying:  boolean
+  isDeploying: boolean
 }
 
 const activities: Activity[] = [
@@ -32,6 +34,7 @@ const activities: Activity[] = [
   { name: 'Model Post Training Pipeline',    status: Status.Building,   ships: true },
   { name: 'Interviewing',                    status: Status.InProgress },
   { name: 'AWS Wickr Console',               status: Status.Building,   ships: true },
+  { name: 'BowPress',                        status: Status.Building,   deploys: true },
   { name: 'Distributed Inference',           status: Status.Learning  },
   { name: 'Context Engineering',             status: Status.Learning  },
   { name: 'Image Processing Pipeline',       status: Status.Building,   ships: true },
@@ -53,7 +56,7 @@ const formatStatus = (s: Status) =>
 
 const MAX      = 3
 const SLIDE_MS = 360
-const blankFlags = { isPending: false, isNew: false, isShipping: false, isFailing: false, isRetrying: false }
+const blankFlags = { isPending: false, isNew: false, isShipping: false, isFailing: false, isRetrying: false, isDeploying: false }
 
 // ── Module-level persistent state ─────────────────────────────────────────────
 // Survives component unmount/remount so the feed never resets on navigation.
@@ -89,6 +92,16 @@ function tick() {
       updateItems(prev => prev.map(item => item.id === id ? { ...item, isNew: false } : item))
     }, 500)
   }, 200)
+
+  if (activity.deploys) {
+    const deployDelay = 800 + Math.random() * 8000
+    setTimeout(() => {
+      updateItems(prev => prev.map(item => item.id === id ? { ...item, status: Status.Deploying, isDeploying: true } : item))
+      setTimeout(() => {
+        updateItems(prev => prev.map(item => item.id === id ? { ...item, isDeploying: false } : item))
+      }, 700)
+    }, deployDelay)
+  }
 
   if (activity.ships) {
     const shipDelay = 800 + Math.random() * 8000
@@ -182,15 +195,17 @@ export default function BuildFeed() {
               item.status === Status.Failed ? 'feed-row--failed' : '',
               item.isPending  ? 'feed-row--pending'   : '',
               item.isNew      ? 'feed-row--new'       : '',
-              item.isShipping ? 'feed-row--shipping'  : '',
-              item.isFailing  ? 'feed-row--failing'   : '',
-              item.isRetrying ? 'feed-row--retrying'  : '',
+              item.isShipping  ? 'feed-row--shipping'   : '',
+              item.isFailing   ? 'feed-row--failing'    : '',
+              item.isRetrying  ? 'feed-row--retrying'   : '',
+              item.isDeploying ? 'feed-row--deploying'  : '',
             ].filter(Boolean).join(' ')}
           >
             <span className="feed-name">{item.name}</span>
             <span className={`feed-badge feed-badge--${
-              item.status === Status.Shipped ? 'shipped' :
-              item.status === Status.Failed  ? 'retrying' :
+              item.status === Status.Shipped   ? 'shipped'   :
+              item.status === Status.Failed    ? 'retrying'  :
+              item.status === Status.Deploying ? 'deploying' :
               'active'
             }`}>
               {item.status === Status.Shipped
