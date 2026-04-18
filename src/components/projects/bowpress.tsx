@@ -86,6 +86,10 @@ export default function BowPress() {
             <span className="screenshot-caption">Period Comparison</span>
           </div>
           <div className="screenshot-frame">
+            <img src="/projects/bowpress/tuning-suggestions.png" alt="Tuning suggestions with recommended parameter changes and reasoning" />
+            <span className="screenshot-caption">Tuning Suggestions</span>
+          </div>
+          <div className="screenshot-frame">
             <img src="/projects/bowpress/analytics-insights.png" alt="Analytics trend analysis with AI-generated insight cards" />
             <span className="screenshot-caption">Trend Insights</span>
           </div>
