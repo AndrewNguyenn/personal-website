@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react'
+import BowPress, { meta as bowpressMeta } from './bowpress'
 import JobApplicationAgent, { meta as jobMeta } from './job-application-agent'
 import AlexaExpertSDK, { meta as alexaMeta } from './alexa-expert-sdk'
 
@@ -17,6 +18,7 @@ export interface ProjectEntry extends ProjectMeta {
 
 // Ordered list — drives the Projects listing page
 export const projectList: ProjectEntry[] = [
+  { ...bowpressMeta, component: BowPress },
   { ...jobMeta, component: JobApplicationAgent },
   { ...alexaMeta, component: AlexaExpertSDK },
   {
