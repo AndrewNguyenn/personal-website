@@ -82,10 +82,6 @@ function EditLink({ children = 'EDIT' }: { children?: ReactNode }) {
   )
 }
 
-function Rule({ soft = false }: { soft?: boolean }) {
-  return <div style={{ height: 1, background: soft ? BP.line2 : BP.line }} />
-}
-
 /* ---------- Phone frame ------------------------------------- */
 
 function PhoneFrame({ children }: { children: ReactNode }) {
