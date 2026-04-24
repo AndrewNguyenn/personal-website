@@ -1,0 +1,363 @@
+/* ============================================================
+   BowPress project page — Kenrokuen design language
+   Scoped to #project-page.bowpress-page so the rest of the
+   site keeps its existing look.
+   ============================================================ */
+
+#project-page.bowpress-page {
+  /* Kenrokuen tokens, scoped */
+  --bp-paper:    #eef2ec;
+  --bp-paper-2:  #e4ebe3;
+  --bp-cream:    #f6f8f3;
+  --bp-ink:      #1f2a26;
+  --bp-ink-2:    #4a5752;
+  --bp-ink-3:    #8a9690;
+  --bp-line:     #c7d2c9;
+  --bp-line-2:   #d9e1d8;
+  --bp-pond:     #4a7989;
+  --bp-pond-dk:  #2d5a6b;
+  --bp-pond-lt:  #8fb3bf;
+  --bp-deep:     #1e3e4a;
+  --bp-moss:     #6d8551;
+  --bp-pine:     #4a5f3a;
+  --bp-maple:    #b5614a;
+  --bp-stone:    #9aa3a0;
+
+  --bp-display: 'Fraunces', 'Cormorant Garamond', Georgia, serif;
+  --bp-ui: 'Inter', -apple-system, system-ui, sans-serif;
+  --bp-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, monospace;
+
+  color-scheme: light;
+  background: var(--bp-paper);
+  color: var(--bp-ink);
+  font-family: var(--bp-ui);
+  max-width: 880px;
+  padding: 56px 48px 96px;
+  border-left: 1px solid var(--bp-line);
+  border-right: 1px solid var(--bp-line);
+}
+
+@media (max-width: 1024px) {
+  #project-page.bowpress-page {
+    padding: 36px 22px 72px;
+    border-left: 0;
+    border-right: 0;
+  }
+}
+
+/* ---------- Back link --------------------------------------- */
+#project-page.bowpress-page .back-link {
+  font-family: var(--bp-ui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bp-pond-dk);
+  margin-bottom: 36px;
+}
+#project-page.bowpress-page .back-link:hover {
+  color: var(--bp-deep);
+}
+
+/* ---------- Eyebrow ----------------------------------------- */
+.bp-eyebrow {
+  font-family: var(--bp-ui);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--bp-ink-3);
+  margin: 0 0 18px;
+}
+
+/* ---------- Header ------------------------------------------ */
+#project-page.bowpress-page .project-page-header {
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--bp-line);
+}
+
+#project-page.bowpress-page .project-page-header h2 {
+  font-family: var(--bp-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 52px;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  color: var(--bp-ink);
+  margin: 0 0 14px;
+}
+
+@media (max-width: 1024px) {
+  #project-page.bowpress-page .project-page-header h2 {
+    font-size: 36px;
+  }
+}
+
+#project-page.bowpress-page .project-page-subtitle {
+  font-family: var(--bp-display);
+  font-style: italic;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--bp-pond-dk);
+  margin: 0;
+  max-width: 560px;
+}
+
+/* ---------- Stamp row (tags) -------------------------------- */
+.bp-stamp-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.bp-stamp {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--bp-ui);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border: 1px solid var(--bp-pond-dk);
+  border-radius: 1px;
+  color: var(--bp-pond-dk);
+  background: transparent;
+}
+.bp-stamp--moss   { color: var(--bp-pine);  border-color: var(--bp-pine) }
+.bp-stamp--maple  { color: var(--bp-maple); border-color: var(--bp-maple) }
+.bp-stamp--stone  { color: var(--bp-stone); border-color: var(--bp-stone) }
+.bp-stamp--solid  {
+  background: var(--bp-pond-dk);
+  color: var(--bp-paper);
+  border-color: var(--bp-pond-dk);
+}
+
+/* ---------- Body -------------------------------------------- */
+#project-page.bowpress-page .project-page-body {
+  gap: 0;
+}
+
+#project-page.bowpress-page .project-page-body p {
+  font-family: var(--bp-ui);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--bp-ink-2);
+  max-width: 680px;
+  margin: 0 0 18px;
+}
+
+#project-page.bowpress-page .project-page-body p:last-of-type {
+  margin-bottom: 0;
+}
+
+#project-page.bowpress-page .project-page-body a {
+  color: var(--bp-pond-dk);
+  text-decoration: none;
+  border-bottom: 1px solid var(--bp-pond-lt);
+  padding-bottom: 1px;
+}
+#project-page.bowpress-page .project-page-body a:hover {
+  color: var(--bp-deep);
+  border-bottom-color: var(--bp-pond-dk);
+}
+
+/* ---------- Section ----------------------------------------- */
+.bp-section {
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--bp-line-2);
+}
+
+.bp-section:first-of-type {
+  margin-top: 28px;
+}
+
+.bp-section-eyebrow {
+  font-family: var(--bp-ui);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bp-ink-3);
+  margin: 0 0 14px;
+}
+
+.bp-section-title {
+  font-family: var(--bp-ui);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--bp-ink);
+  margin: 0 0 14px;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Screenshot row (flat, hairline) ----------------- */
+#project-page.bowpress-page .screenshot-row {
+  gap: 18px;
+  margin: 10px 0 6px;
+}
+
+#project-page.bowpress-page .screenshot-frame {
+  gap: 12px;
+  align-items: flex-start;
+}
+
+#project-page.bowpress-page .screenshot-frame img {
+  width: 208px;
+  border-radius: 0;
+  border: 1px solid var(--bp-line);
+  box-shadow: none;
+  background: var(--bp-cream);
+}
+
+@media (max-width: 1024px) {
+  #project-page.bowpress-page .screenshot-frame img {
+    width: 168px;
+  }
+}
+
+#project-page.bowpress-page .screenshot-caption {
+  font-family: var(--bp-ui);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bp-ink-3);
+  text-align: left;
+  padding-left: 2px;
+}
+
+/* ---------- Inline phone mockups ---------------------------- */
+.bp-phone-row {
+  gap: 22px !important;
+  padding: 6px 2px 10px !important;
+}
+
+.bp-phone-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.bp-phone-cell .screenshot-caption {
+  padding-left: 8px;
+}
+
+.bp-phone {
+  box-shadow: 0 1px 0 var(--bp-line);
+}
+
+/* ---------- Spec list (drift-table pattern) ----------------- */
+.bp-spec {
+  margin: 4px 0 6px;
+  border-top: 1px solid var(--bp-line-2);
+}
+
+.bp-spec-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 180px) 1fr auto;
+  gap: 20px;
+  align-items: baseline;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--bp-line-2);
+}
+
+.bp-spec-key {
+  font-family: var(--bp-ui);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bp-ink-3);
+}
+
+.bp-spec-val {
+  font-family: var(--bp-display);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--bp-ink);
+}
+
+.bp-spec-meta {
+  font-family: var(--bp-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--bp-ink-3);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .bp-spec-row {
+    grid-template-columns: 1fr auto;
+  }
+  .bp-spec-key {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- Footer row -------------------------------------- */
+.bp-footer {
+  margin-top: 40px;
+  padding-top: 18px;
+  border-top: 1px solid var(--bp-line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+#project-page.bowpress-page .project-page-body .bp-footer p {
+  margin: 0;
+}
+
+.bp-link-row {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.bp-link {
+  font-family: var(--bp-ui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bp-pond-dk);
+  text-decoration: none;
+  border-bottom: 0 !important;
+}
+.bp-link::after {
+  content: " \203A";
+  font-family: var(--bp-display);
+  font-style: italic;
+  letter-spacing: 0;
+  margin-left: 2px;
+}
+.bp-link:hover {
+  color: var(--bp-deep);
+}
+
+/* Dark mode: Kenrokuen is light-only by design.
+   Keep the paper-moss palette legible even when the rest
+   of the site flips dark. */
+@media (prefers-color-scheme: dark) {
+  #project-page.bowpress-page {
+    background: var(--bp-paper);
+    color: var(--bp-ink);
+  }
+  #project-page.bowpress-page .project-page-body p {
+    color: var(--bp-ink-2);
+  }
+}
