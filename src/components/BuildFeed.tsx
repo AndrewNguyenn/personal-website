@@ -2,15 +2,17 @@ import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import './styles/BuildFeed.css'
 
 const Status = {
-  Building:   'building',
-  Shipped:    'shipped',
-  Learning:   'learning',
-  Ideating:   'ideating',
-  InProgress: 'in-progress',
-  Training:   'training',
-  Failed:     'failed',
-  Retrying:   'retrying',
-  Deploying:  'deploying',
+  Building:     'building',
+  Shipped:      'shipped',
+  Learning:     'learning',
+  Ideating:     'ideating',
+  InProgress:   'in-progress',
+  Training:     'training',
+  Failed:       'failed',
+  Retrying:     'retrying',
+  Deploying:    'deploying',
+  Passed:       'passed',
+  SigningOffer: 'signing-offer',
 } as const
 
 type Status = typeof Status[keyof typeof Status]
@@ -26,6 +28,7 @@ type Item     = {
   isFailing:   boolean
   isRetrying:  boolean
   isDeploying: boolean
+  isPassing:   boolean
 }
 
 const activities: Activity[] = [
@@ -56,7 +59,7 @@ const formatStatus = (s: Status) =>
 
 const MAX      = 3
 const SLIDE_MS = 360
-const blankFlags = { isPending: false, isNew: false, isShipping: false, isFailing: false, isRetrying: false, isDeploying: false }
+const blankFlags = { isPending: false, isNew: false, isShipping: false, isFailing: false, isRetrying: false, isDeploying: false, isPassing: false }
 
 // ── Module-level persistent state ─────────────────────────────────────────────
 // Survives component unmount/remount so the feed never resets on navigation.
@@ -115,12 +118,12 @@ function tick() {
 
   if (activity.name === 'Interviewing' && Math.random() < 0.95) {
     setTimeout(() => {
-      updateItems(prev => prev.map(item => item.id === id ? { ...item, status: Status.Failed, isFailing: true } : item))
+      updateItems(prev => prev.map(item => item.id === id ? { ...item, status: Status.Passed, isPassing: true } : item))
       setTimeout(() => {
-        updateItems(prev => prev.map(item => item.id === id ? { ...item, isFailing: false } : item))
+        updateItems(prev => prev.map(item => item.id === id ? { ...item, isPassing: false } : item))
       }, 700)
       setTimeout(() => {
-        updateItems(prev => prev.map(item => item.id === id ? { ...item, status: Status.Retrying, isRetrying: true } : item))
+        updateItems(prev => prev.map(item => item.id === id ? { ...item, status: Status.SigningOffer, isRetrying: true } : item))
         setTimeout(() => {
           updateItems(prev => prev.map(item => item.id === id ? { ...item, isRetrying: false } : item))
         }, 700)
@@ -191,13 +194,14 @@ export default function BuildFeed() {
             }}
             className={[
               'feed-row',
-              item.status !== Status.Shipped && item.status !== Status.Failed ? 'feed-row--active' : '',
+              item.status !== Status.Shipped && item.status !== Status.Failed && item.status !== Status.Passed ? 'feed-row--active' : '',
               item.status === Status.Failed ? 'feed-row--failed' : '',
               item.isPending  ? 'feed-row--pending'   : '',
               item.isNew      ? 'feed-row--new'       : '',
               item.isShipping  ? 'feed-row--shipping'   : '',
               item.isFailing   ? 'feed-row--failing'    : '',
               item.isRetrying  ? 'feed-row--retrying'   : '',
+              item.isPassing   ? 'feed-row--passing'    : '',
               item.isDeploying                          ? 'feed-row--deploying'        : '',
               item.status === Status.Deploying          ? 'feed-row--status-deploying' : '',
             ].filter(Boolean).join(' ')}
@@ -205,15 +209,18 @@ export default function BuildFeed() {
             <span className="feed-name">{item.name}</span>
             <span className={`feed-badge feed-badge--${
               item.status === Status.Shipped   ? 'shipped'   :
+              item.status === Status.Passed    ? 'shipped'   :
               item.status === Status.Failed    ? 'retrying'  :
               item.status === Status.Deploying ? 'deploying' :
               'active'
             }`}>
               {item.status === Status.Shipped
                 ? <><span className="feed-check">✓</span>Shipped</>
-                : item.status === Status.Failed
-                  ? <><span className="feed-x">✕</span>Failed</>
-                  : <><span className="feed-spinner" />{formatStatus(item.status)}</>
+                : item.status === Status.Passed
+                  ? <><span className="feed-check">✓</span>Passed</>
+                  : item.status === Status.Failed
+                    ? <><span className="feed-x">✕</span>Failed</>
+                    : <><span className="feed-spinner" />{formatStatus(item.status)}</>
               }
             </span>
           </div>
