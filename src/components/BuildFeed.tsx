@@ -116,7 +116,7 @@ function tick() {
     }, shipDelay)
   }
 
-  if (activity.name === 'Interviewing' && Math.random() < 0.95) {
+  if (activity.name === 'Interviewing' && Math.random() < 0.99) {
     setTimeout(() => {
       updateItems(prev => prev.map(item => item.id === id ? { ...item, status: Status.Passed, isPassing: true } : item))
       setTimeout(() => {
