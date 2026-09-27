@@ -119,7 +119,6 @@ body.sand {
 
 .sc-caption {
   position: absolute;
-  top: 448px;
   font-family: var(--n-mono);
   font-size: 28px;
   white-space: nowrap;

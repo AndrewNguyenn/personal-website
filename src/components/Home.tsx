@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import BuildFeed from './BuildFeed'
 import CommandPalette from './CommandPalette'
 import './styles/Home.css'
@@ -83,8 +83,84 @@ function jump(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth' })
 }
 
+// Scrolling past the bottom of the page fills a bar; a full bar opens the showcase.
+const SHOWCASE_STATE = { from: 'home-scroll' }
+
+function useScrollToShowcase() {
+  const [progress, setProgress] = useState(0)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    let value = 0
+    let idle: number | undefined
+    // Overscroll only counts for a gesture that starts once the page is already
+    // at the bottom, so a fast fling down the page (and its momentum) doesn't
+    // fall straight through into the showcase.
+    let armed = false
+    let lastWheel = 0
+    const atBottom = () => window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2
+    const onScroll = () => {
+      if (!atBottom()) armed = false
+    }
+
+    const push = (amount: number) => {
+      window.clearTimeout(idle)
+      if (!armed) return
+      if (amount <= 0 || !atBottom()) value = 0
+      else value = Math.min(1, value + amount)
+      setProgress(value)
+      if (value >= 1) {
+        navigate('/showcase', { state: SHOWCASE_STATE })
+        return
+      }
+      idle = window.setTimeout(() => { value = 0; setProgress(0) }, 900)
+    }
+
+    let touchY: number | null = null
+    const onWheel = (e: WheelEvent) => {
+      const t = Date.now()
+      const newGesture = t - lastWheel > 250
+      lastWheel = t
+      if (newGesture && atBottom()) armed = true
+      push(e.deltaY / 900)
+    }
+    const onTouchStart = (e: TouchEvent) => {
+      touchY = e.touches[0].clientY
+      if (atBottom()) armed = true
+    }
+    const onTouchMove = (e: TouchEvent) => {
+      if (touchY === null) return
+      const y = e.touches[0].clientY
+      push((touchY - y) / 260)
+      touchY = y
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (!['ArrowDown', 'PageDown', ' ', 'End'].includes(e.key)) return
+      if (atBottom()) armed = true
+      push(0.34)
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('wheel', onWheel, { passive: true })
+    window.addEventListener('touchstart', onTouchStart, { passive: true })
+    window.addEventListener('touchmove', onTouchMove, { passive: true })
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.clearTimeout(idle)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('wheel', onWheel)
+      window.removeEventListener('touchstart', onTouchStart)
+      window.removeEventListener('touchmove', onTouchMove)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [navigate])
+
+  return progress
+}
+
 export default function Home() {
   const [palette, setPalette] = useState(false)
+  const runProgress = useScrollToShowcase()
   const root = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -300,6 +376,13 @@ export default function Home() {
           <a href="#top" className="navlink" onClick={onAnchor('top')}>back to top ↑</a>
         </footer>
       </section>
+
+      <Link to="/showcase" state={SHOWCASE_STATE} className="run-showcase dots">
+        <span className="mono run-cmd"><span className="ac">andrew@anduwu</span> ~ % showcase --3d-timeline<span className="caret" /></span>
+        <span className="run-title">Every job and project on <span className="serif">one 3D timeline.</span></span>
+        <span className="mono run-hint">{runProgress > 0 ? 'keep scrolling…' : 'scroll to run ↓'}</span>
+        <span className="run-track" aria-hidden="true"><span className="run-fill" style={{ transform: `scaleX(${runProgress})` }} /></span>
+      </Link>
 
       {palette && <CommandPalette onClose={() => setPalette(false)} onJump={jump} />}
     </div>

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type TouchEvent, type WheelEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import './styles/Showcase.css'
 
 // The scene is authored on a 1000px-tall stage and scaled to fit the viewport.
@@ -78,11 +78,14 @@ const CARD_W = 250
 const NOW_X = 3425
 const ticks: [string, number][] = [['2018', 125], ['2021', 825], ['2022', 1225], ['2024', 1650], ['2025', 1925], ['2026', 2700]]
 const bigYears: [string, number][] = [['2018', -260], ['2022', 900], ['2025', 2000], ['2026', 3250]]
-const captions: [string, number][] = [
-  ['It started with light cues for live TV.', -40],
-  ['Then infrastructure: GovCloud, EKS, billing.', 980],
-  ['Agents that browse, reason, and book.', 2200],
-  ["Now it's deciding what to build next.", 3220],
+// Captions sit in whichever card row is empty at that point on the track.
+const UP_ROW = 300
+const LOW_ROW = 640
+const captions: [string, number, number][] = [
+  ['It started with light cues for live TV.', -40, UP_ROW],
+  ['Then infrastructure: GovCloud, EKS, billing.', 980, UP_ROW],
+  ['Agents that browse, reason, and book.', 2150, LOW_ROW],
+  ["Now it's deciding what to build next.", 3480, UP_ROW],
 ]
 const calendar = [0,1,0,0,1,1,0, 0,0,1,1,0,0,1, 1,0,0,1,0,1,0, 0,1,1,0,0,0,1]
 const beams = ['a', 'b', 'c', 'b', 'a']
@@ -142,7 +145,9 @@ function useViewport() {
 }
 
 export default function Showcase() {
-  const [index, setIndex] = useState(7)
+  // Arriving by scrolling off the home page starts the journey at the beginning.
+  const arrivedByScroll = (useLocation().state as { from?: string } | null)?.from === 'home-scroll'
+  const [index, setIndex] = useState(arrivedByScroll ? 0 : 7)
   const [focus, setFocus] = useState(false)
   const lastWheel = useRef(0)
   const touchX = useRef<number | null>(null)
@@ -150,6 +155,19 @@ export default function Showcase() {
 
   const go = (i: number) => setIndex(clamp(i))
   const step = (delta: number) => setIndex(i => clamp(i + delta))
+
+  // Swallow the trailing wheel momentum from the scroll that brought us here:
+  // ignore the wheel until it has been quiet for a moment.
+  const settled = useRef(false)
+  const settleTimer = useRef<number | undefined>(undefined)
+  const settleSoon = () => {
+    window.clearTimeout(settleTimer.current)
+    settleTimer.current = window.setTimeout(() => { settled.current = true }, 300)
+  }
+  useEffect(() => {
+    settleSoon()
+    return () => window.clearTimeout(settleTimer.current)
+  }, [])
 
   useEffect(() => {
     document.body.classList.add('sand')
@@ -169,6 +187,7 @@ export default function Showcase() {
 
   const onWheel = (e: WheelEvent) => {
     if (focus) return
+    if (!settled.current) { settleSoon(); return }
     const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
     const t = Date.now()
     if (Math.abs(d) < 8 || t - lastWheel.current < 550) return
@@ -217,7 +236,7 @@ export default function Showcase() {
             {bigYears.map(([y, x]) => <span key={y} className="sc-bigyear" style={{ left: x }}>{y}</span>)}
           </div>
           <div className="sc-layer sc-layer--mid">
-            {captions.map(([text, x]) => <span key={text} className="sc-caption" style={{ left: x }}>{text}</span>)}
+            {captions.map(([text, x, y]) => <span key={text} className="sc-caption" style={{ left: x, top: y }}>{text}</span>)}
           </div>
 
           <div className="sc-axis" aria-hidden="true" />
