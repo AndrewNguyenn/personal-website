@@ -27,6 +27,12 @@
   --mono: ui-monospace, Consolas, monospace;
   --serif: Georgia, 'Times New Roman', serif;
 
+  /* Home + Showcase */
+  --n-sans: 'Geist', system-ui, sans-serif;
+  --n-mono: 'Geist Mono', ui-monospace, monospace;
+  --n-serif: 'Instrument Serif', Georgia, serif;
+  --n-pixel: 'Silkscreen', monospace;
+
   /* Font sizes */
   --fs-xs: 12px;
   --fs-sm: 13px;
@@ -106,6 +112,10 @@ main {
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+main.main-bare {
+  padding-top: 0;
 }
 
 h1,

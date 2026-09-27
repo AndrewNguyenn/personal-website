@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import About from './components/About'
+import Home from './components/Home'
+import Showcase from './components/Showcase'
 import Projects from './components/Projects'
 import Reading from './components/Reading'
 import Notes from './components/Notes'
@@ -37,7 +38,8 @@ function AnimatedRoutes() {
       }}
     >
       <Routes location={displayLocation}>
-        <Route path="/" element={<About />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/showcase" element={<Showcase />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/reading" element={<Reading />} />
         <Route path="/notes" element={<Notes />} />
@@ -48,14 +50,27 @@ function AnimatedRoutes() {
   )
 }
 
+// Home and Showcase bring their own nav and footer.
+const BARE_ROUTES = ['/', '/showcase']
+
+function Shell() {
+  const { pathname } = useLocation()
+  const bare = BARE_ROUTES.includes(pathname)
+  return (
+    <>
+      {!bare && <Header />}
+      <main className={bare ? 'main-bare' : undefined}>
+        <AnimatedRoutes />
+      </main>
+      {!bare && <Footer />}
+    </>
+  )
+}
+
 function App() {
   return (
     <BrowserRouter>
-      <Header />
-      <main>
-        <AnimatedRoutes />
-      </main>
-      <Footer />
+      <Shell />
     </BrowserRouter>
   )
 }

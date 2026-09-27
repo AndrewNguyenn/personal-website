@@ -22,6 +22,7 @@ type Item     = {
   id:          number
   name:        string
   status:      Status
+  time:        string
   isPending:   boolean
   isNew:       boolean
   isShipping:  boolean
@@ -57,18 +58,20 @@ const activities: Activity[] = [
 const formatStatus = (s: Status) =>
   s.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')
 
-const MAX      = 3
+const MAX      = 5
 const SLIDE_MS = 360
 const blankFlags = { isPending: false, isNew: false, isShipping: false, isFailing: false, isRetrying: false, isDeploying: false, isPassing: false }
 
 // ── Module-level persistent state ─────────────────────────────────────────────
 // Survives component unmount/remount so the feed never resets on navigation.
 
-let moduleItems: Item[] = activities.slice(0, 3).map((a, i) => ({
-  id: i, name: a.name, status: a.status, ...blankFlags,
+const clock = () => new Date().toTimeString().slice(0, 8)
+
+let moduleItems: Item[] = activities.slice(0, MAX).map((a, i) => ({
+  id: i, name: a.name, status: a.status, time: clock(), ...blankFlags,
 }))
 let moduleNextId  = 10
-let moduleNextIdx = 3
+let moduleNextIdx = MAX
 
 const subscribers = new Set<() => void>()
 
@@ -84,7 +87,7 @@ function tick() {
 
   // Phase 1: add invisible placeholder so existing rows FLIP-slide down
   updateItems(prev => [
-    { id, name: activity.name, status: activity.status, ...blankFlags, isPending: true },
+    { id, name: activity.name, status: activity.status, time: clock(), ...blankFlags, isPending: true },
     ...prev,
   ].slice(0, MAX))
 
@@ -137,7 +140,7 @@ setInterval(tick, 3200)
 
 // ── Component ──────────────────────────────────────────────────────────────────
 
-export default function BuildFeed() {
+export default function BuildFeed({ id }: { id?: string }) {
   const [items, setItems] = useState<Item[]>(() => moduleItems)
 
   const rowRefs   = useRef<Map<number, HTMLDivElement>>(new Map())
@@ -179,53 +182,42 @@ export default function BuildFeed() {
   }, [items])
 
   return (
-    <section id="build-feed">
-      <div className="feed-header">
-        <h2>In Progress</h2>
-        <p className="feed-subtitle">Something's always happening...</p>
+    <div id={id} className="tail">
+      <div className="tail-bar">
+        <span className="tail-lights" aria-hidden="true"><span /><span /><span /></span>
+        <span className="tail-title">tail -f ~/in-progress.log</span>
+        <span className="tail-live"><span className="now-dot" />live</span>
       </div>
-      <div className="feed-panel">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            ref={(el) => {
-              if (el) rowRefs.current.set(item.id, el)
-              else    rowRefs.current.delete(item.id)
-            }}
-            className={[
-              'feed-row',
-              item.status !== Status.Shipped && item.status !== Status.Failed && item.status !== Status.Passed ? 'feed-row--active' : '',
-              item.status === Status.Failed ? 'feed-row--failed' : '',
-              item.isPending  ? 'feed-row--pending'   : '',
-              item.isNew      ? 'feed-row--new'       : '',
-              item.isShipping  ? 'feed-row--shipping'   : '',
-              item.isFailing   ? 'feed-row--failing'    : '',
-              item.isRetrying  ? 'feed-row--retrying'   : '',
-              item.isPassing   ? 'feed-row--passing'    : '',
-              item.isDeploying                          ? 'feed-row--deploying'        : '',
-              item.status === Status.Deploying          ? 'feed-row--status-deploying' : '',
-            ].filter(Boolean).join(' ')}
-          >
-            <span className="feed-name">{item.name}</span>
-            <span className={`feed-badge feed-badge--${
-              item.status === Status.Shipped   ? 'shipped'   :
-              item.status === Status.Passed    ? 'shipped'   :
-              item.status === Status.Failed    ? 'retrying'  :
-              item.status === Status.Deploying ? 'deploying' :
-              'active'
-            }`}>
-              {item.status === Status.Shipped
-                ? <><span className="feed-check">✓</span>Shipped</>
-                : item.status === Status.Passed
-                  ? <><span className="feed-check">✓</span>Passed</>
-                  : item.status === Status.Failed
-                    ? <><span className="feed-x">✕</span>Failed</>
-                    : <><span className="feed-spinner" />{formatStatus(item.status)}</>
-              }
-            </span>
-          </div>
-        ))}
+      <div className="tail-body">
+        {items.map((item) => {
+          const done = item.status === Status.Shipped || item.status === Status.Passed
+          const flash = item.isShipping || item.isPassing || item.isDeploying || item.isRetrying
+          return (
+            <div
+              key={item.id}
+              ref={(el) => {
+                if (el) rowRefs.current.set(item.id, el)
+                else    rowRefs.current.delete(item.id)
+              }}
+              className={[
+                'tail-row',
+                item.isPending ? 'tail-row--pending' : '',
+                item.isNew     ? 'tail-row--new'     : '',
+              ].filter(Boolean).join(' ')}
+            >
+              <span className="tail-time">{item.time}</span>
+              <span className="tail-name">{item.name}</span>
+              <span className={`tail-badge tail-badge--${done ? 'done' : 'active'}${flash ? ' tail-badge--pop' : ''}`}>
+                {done
+                  ? <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6.5L4.8 9L10 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  : <span className="spinner" />}
+                {formatStatus(item.status)}
+              </span>
+            </div>
+          )
+        })}
       </div>
-    </section>
+      <div className="tail-prompt"><span className="ac">andrew@anduwu</span>&nbsp;~ %<span className="caret" /></div>
+    </div>
   )
 }
