@@ -55,6 +55,8 @@ const activities: Activity[] = [
   { name: 'Job Scheduler',                   status: Status.Building,   ships: true },
 ]
 
+const CENTERING_A_DIV: Activity = { name: 'Centering a div', status: Status.InProgress }
+
 const formatStatus = (s: Status) =>
   s.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')
 
@@ -82,8 +84,10 @@ function updateItems(updater: (prev: Item[]) => Item[]) {
 
 function tick() {
   const id       = moduleNextId++
-  const activity = activities[moduleNextIdx % activities.length]
-  moduleNextIdx++
+  // Every so often, a task that never quite finishes.
+  const rare = Math.random() < 0.04
+  const activity = rare ? CENTERING_A_DIV : activities[moduleNextIdx % activities.length]
+  if (!rare) moduleNextIdx++
 
   // Phase 1: add invisible placeholder so existing rows FLIP-slide down
   updateItems(prev => [
@@ -140,7 +144,7 @@ setInterval(tick, 3200)
 
 // ── Component ──────────────────────────────────────────────────────────────────
 
-export default function BuildFeed({ id }: { id?: string }) {
+export default function BuildFeed({ id, onPrompt }: { id?: string; onPrompt?: () => void }) {
   const [items, setItems] = useState<Item[]>(() => moduleItems)
 
   const rowRefs   = useRef<Map<number, HTMLDivElement>>(new Map())
@@ -217,7 +221,10 @@ export default function BuildFeed({ id }: { id?: string }) {
           )
         })}
       </div>
-      <div className="tail-prompt"><span className="ac">andrew@anduwu</span>&nbsp;~ %<span className="caret" /></div>
+      <button type="button" className="tail-prompt" onClick={onPrompt} aria-label="Open terminal">
+        <span className="ac">andrew@anduwu</span>&nbsp;~ %<span className="caret" />
+        <span className="tail-prompt-hint">click to type</span>
+      </button>
     </div>
   )
 }

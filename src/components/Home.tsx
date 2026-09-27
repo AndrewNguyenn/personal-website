@@ -1,8 +1,12 @@
-import { useEffect, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type AnimationEvent, type CSSProperties, type MouseEvent, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import BuildFeed from './BuildFeed'
 import CommandPalette from './CommandPalette'
-import './styles/Home.css'
+import Terminal from './Terminal'
+import { Atmosphere, CardVisual } from './Site'
+import { reducedMotion, useReveal } from './siteHooks'
+import type { Kind } from './ShowcaseVisuals'
+import './styles/Site.css'
 
 // ── Timeline ──────────────────────────────────────────────────────────────────
 // Track spans 2018 → 2028 (10 years). Positions are in "track px" (104 per year)
@@ -19,7 +23,7 @@ const nowLabel = `NOW · ${now.toLocaleString('en-US', { month: 'short' }).toUpp
 type Lane = { name: string; role: string; dates: string; left: number; width: number; label: string; current?: true }
 
 const lanes: Lane[] = [
-  { name: 'Coinbase',            role: 'Financial engineering',             dates: '2026 — now', left: 832, width: Math.max(nowPx - 832, 48), label: '2026 —', current: true },
+  { name: 'Coinbase',            role: 'Sr. Software Engineer',             dates: '2026 — now', left: 832, width: Math.max(nowPx - 832, 48), label: '2026 —', current: true },
   { name: 'Amazon · Alexa AI',   role: 'SDE, Developer Tech — web agents',  dates: '2025 — 26',  left: 728, width: 121, label: '2025 — 26 · SDK' },
   { name: 'AWS Wickr',           role: 'SDE — EKS, GovCloud, billing',      dates: '2022 — 25',  left: 416, width: 312, label: '2022 — 25 · Platform, Billing' },
   { name: 'JPMorgan Chase',      role: 'Sr. Associate SWE — Chase.com',     dates: '2021 — 22',  left: 287, width: 163, label: '2021 — 22 · Chase.com' },
@@ -38,7 +42,7 @@ type Project = {
   href?: string
   blurb: string
   tags: string[]
-  extra?: ReactNode
+  visual: Kind
 }
 
 const smallProjects: Project[] = [
@@ -46,17 +50,19 @@ const smallProjects: Project[] = [
     num: '03', kind: 'SDK · PLATFORM', name: 'Alexa Expert SDK', to: '/projects/alexa-expert-sdk',
     blurb: 'Let partners like Thumbtack and TaskRabbit onboard as Alexa skills in natural language, plus the CDK platform Alexa expert teams build on.',
     tags: ['Alexa', 'AWS CDK', 'Java'],
+    visual: 'browser',
   },
   {
     num: '02', kind: 'WEB · OCR', name: 'Schedule Portal', href: 'https://github.com/AndrewNguyenn/schedule-portal',
     blurb: "Hospital schedule photos become Google Calendar events: Cloud Vision OCR parses the shifts and fills a shared calendar. Built for my girlfriend's weekly rota.",
     tags: ['Python', 'Cloud Vision', 'GCP'],
+    visual: 'calendar',
   },
   {
     num: '01', kind: 'INFRA · OPEN SOURCE', name: 'ComfyUI on AWS', href: 'https://github.com/AndrewNguyenn/aws-deployment-of-comfyui',
     blurb: 'One command spins up a GPU workstation for image generation, with EFS model persistence and a built-in file browser.',
     tags: ['AWS CDK', 'EFS', 'GPU'],
-    extra: <div className="card-cmd"><span className="ac">$</span> cdk deploy ComfyUIStack</div>,
+    visual: 'nodes',
   },
 ]
 
@@ -77,77 +83,62 @@ const Tags = ({ tags }: { tags: string[] }) => (
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
-const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
 function jump(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth' })
 }
 
-// Scrolling past the bottom of the page fills a bar; a full bar opens the showcase.
+// Scrolling a little past the bottom of the page opens the showcase: the page
+// lifts away, then the showcase fades up (see .home--leaving and .showcase).
 const SHOWCASE_STATE = { from: 'home-scroll' }
+const LEAVE_MS = 450
 
 function useScrollToShowcase() {
   const [progress, setProgress] = useState(0)
+  const [leaving, setLeaving] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
     let value = 0
     let idle: number | undefined
-    // Overscroll only counts for a gesture that starts once the page is already
-    // at the bottom, so a fast fling down the page (and its momentum) doesn't
-    // fall straight through into the showcase.
-    let armed = false
-    let lastWheel = 0
-    const atBottom = () => window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2
-    const onScroll = () => {
-      if (!atBottom()) armed = false
-    }
+    let done = false
+    const atBottom = () => window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4
 
     const push = (amount: number) => {
+      if (done) return
       window.clearTimeout(idle)
-      if (!armed) return
       if (amount <= 0 || !atBottom()) value = 0
       else value = Math.min(1, value + amount)
       setProgress(value)
       if (value >= 1) {
-        navigate('/showcase', { state: SHOWCASE_STATE })
+        done = true
+        setLeaving(true)
+        window.setTimeout(() => navigate('/showcase', { state: SHOWCASE_STATE }), reducedMotion() ? 0 : LEAVE_MS)
         return
       }
-      idle = window.setTimeout(() => { value = 0; setProgress(0) }, 900)
+      idle = window.setTimeout(() => { value = 0; setProgress(0) }, 600)
     }
 
     let touchY: number | null = null
-    const onWheel = (e: WheelEvent) => {
-      const t = Date.now()
-      const newGesture = t - lastWheel > 250
-      lastWheel = t
-      if (newGesture && atBottom()) armed = true
-      push(e.deltaY / 900)
-    }
-    const onTouchStart = (e: TouchEvent) => {
-      touchY = e.touches[0].clientY
-      if (atBottom()) armed = true
-    }
+    const onWheel = (e: WheelEvent) => push(e.deltaY / 160)
+    const onTouchStart = (e: TouchEvent) => { touchY = e.touches[0].clientY }
     const onTouchMove = (e: TouchEvent) => {
       if (touchY === null) return
       const y = e.touches[0].clientY
-      push((touchY - y) / 260)
+      push((touchY - y) / 90)
       touchY = y
     }
     const onKey = (e: KeyboardEvent) => {
-      if (!['ArrowDown', 'PageDown', ' ', 'End'].includes(e.key)) return
-      if (atBottom()) armed = true
-      push(0.34)
+      // Ignore keys typed into the terminal or any other field.
+      if (e.target instanceof HTMLElement && e.target.closest('input, textarea')) return
+      if (['ArrowDown', 'PageDown', ' ', 'End'].includes(e.key)) push(0.5)
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('wheel', onWheel, { passive: true })
     window.addEventListener('touchstart', onTouchStart, { passive: true })
     window.addEventListener('touchmove', onTouchMove, { passive: true })
     window.addEventListener('keydown', onKey)
     return () => {
       window.clearTimeout(idle)
-      window.removeEventListener('scroll', onScroll)
       window.removeEventListener('wheel', onWheel)
       window.removeEventListener('touchstart', onTouchStart)
       window.removeEventListener('touchmove', onTouchMove)
@@ -155,18 +146,28 @@ function useScrollToShowcase() {
     }
   }, [navigate])
 
-  return progress
+  return { progress, leaving }
 }
+
+
 
 export default function Home() {
   const [palette, setPalette] = useState(false)
-  const runProgress = useScrollToShowcase()
+  // The hero screen: the live feed, the terminal, or one of them powering off.
+  const [screen, setScreen] = useState<'feed' | 'feed-off' | 'tty' | 'tty-off'>('feed')
+  const [switched, setSwitched] = useState(false)
+  const openTerminal = () => {
+    setSwitched(true)
+    setScreen(s => (s === 'feed' ? (reducedMotion() ? 'tty' : 'feed-off') : s))
+  }
+  const closeTerminal = () => setScreen(s => (s === 'tty' ? (reducedMotion() ? 'feed' : 'tty-off') : s))
+  const onPowerOff = (e: AnimationEvent) => {
+    if (e.target !== e.currentTarget) return
+    if (screen === 'feed-off') setScreen('tty')
+    else if (screen === 'tty-off') setScreen('feed')
+  }
+  const { progress: runProgress, leaving } = useScrollToShowcase()
   const root = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    document.body.classList.add('night')
-    return () => document.body.classList.remove('night')
-  }, [])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -179,19 +180,12 @@ export default function Home() {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
-  // Reveal sections as they scroll into view.
+  useReveal(root)
+
+  // Arriving from another page with a hash (e.g. /#projects): scroll to it.
   useEffect(() => {
-    const els = root.current?.querySelectorAll('.reveal') ?? []
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-in')
-          io.unobserve(entry.target)
-        }
-      })
-    }, { threshold: 0.15 })
-    els.forEach(el => io.observe(el))
-    return () => io.disconnect()
+    const id = window.location.hash.slice(1)
+    if (id) window.setTimeout(() => jump(id), 60)
   }, [])
 
   const onAnchor = (id: string) => (e: MouseEvent) => {
@@ -200,16 +194,17 @@ export default function Home() {
   }
 
   return (
-    <div className="home" ref={root}>
-      <header className="home-nav">
-        <a href="#top" className="home-logo mono" onClick={onAnchor('top')}>anduwu<span className="caret" /></a>
-        <nav className="home-links">
+    <div className={leaving ? 'site home home--leaving' : 'site home'} ref={root}>
+      <Atmosphere />
+      <header className="site-nav">
+        <a href="#top" className="site-logo mono" onClick={onAnchor('top')}>anduwu</a>
+        <nav className="site-links">
           <a href="#now" onClick={onAnchor('now')}>Now</a>
           <a href="#work" onClick={onAnchor('work')}>Work</a>
           <a href="#projects" onClick={onAnchor('projects')}>Projects</a>
           <a href="#contact" onClick={onAnchor('contact')}>Contact</a>
         </nav>
-        <div className="home-actions">
+        <div className="site-actions">
           <button type="button" className="kbtn jump-btn mono" onClick={() => setPalette(true)} aria-label="Jump to (Command K)">
             <span className="jump-label">Jump to</span>
             <span className="keys"><kbd>⌘</kbd><kbd>K</kbd></span>
@@ -222,24 +217,34 @@ export default function Home() {
         <div className="hero-copy">
           <div className="hero-prompt mono">
             <div><span className="ac">andrew@anduwu</span> ~ % <span className="typed">whoami</span><span className="caret" /></div>
-            <div className="rise d1 hero-whoami">software engineer · financial engineering @ coinbase · irvine, ca</div>
+            <div className="rise d1 hero-whoami">sr. software engineer · financial engineering @ coinbase · irvine, ca</div>
           </div>
           <h1 className="rise d2">
-            Building the infrastructure that makes AI agents <span className="serif ac">actually do what you want.</span>
+            I build tools for the people around me, <span className="serif ac">and occasionally for everyone else.</span>
           </h1>
           <p className="rise d3 hero-bio">
             I started out programming lights for live TV at <span className="chip">NFL Network</span> and <span className="chip">Disney</span>.
             Then I found code. Six years later I've shipped at <span className="chip">JPMorgan</span>, <span className="chip">AWS Wickr</span> and <span className="chip">Alexa</span>,
-            and now I work in financial engineering at <span className="chip chip-ac">Coinbase</span>. Nights and weekends, I build agents.
+            and now I'm a Sr. Software Engineer in financial engineering at <span className="chip chip-ac">Coinbase</span>.
           </p>
           <div className="rise d4 hero-ctas">
-            <a href="#contact" className="btn-p mono" onClick={onAnchor('contact')}>Open terminal <span>&gt;_</span></a>
+            <button type="button" className="btn-p mono" onClick={screen === 'tty' ? closeTerminal : openTerminal}>
+              {screen === 'tty' ? <>Close terminal <span>×</span></> : <>Open terminal <span>&gt;_</span></>}
+            </button>
             <a href="mailto:andrewcnguyen01@gmail.com" className="btn-s mono">Say hi</a>
             <Link to="/showcase" className="navlink mono">Open showcase <span className="ac">↗</span></Link>
           </div>
         </div>
-        <div className="rise d3">
-          <BuildFeed id="now" />
+        <div className="rise d3 hero-screen">
+          {screen === 'feed' || screen === 'feed-off' ? (
+            <div className={screen === 'feed-off' ? 'crt crt-off' : switched ? 'crt crt-on' : 'crt'} onAnimationEnd={onPowerOff}>
+              <BuildFeed id="now" onPrompt={openTerminal} />
+            </div>
+          ) : (
+            <div className={screen === 'tty-off' ? 'crt crt-off' : 'crt crt-on'} onAnimationEnd={onPowerOff}>
+              <Terminal onClose={closeTerminal} />
+            </div>
+          )}
         </div>
       </section>
 
@@ -313,9 +318,8 @@ export default function Home() {
               <p className="card-blurb">An iOS app for archers who want quantifiable data behind every bow adjustment. Configurations get snapshotted, arrows get plotted on a real WA target face, and over time it surfaces what to tune next.</p>
               <Tags tags={['SwiftUI', 'Cloudflare Workers', 'SQLite', 'Vector Search']} />
             </div>
-            <div className="card-phones">
-              <img className="shot-a" src="/projects/bowpress/session.png" alt="BowPress session screen" />
-              <img className="shot-b" src="/projects/bowpress/analytics-overview.png" alt="BowPress analytics overview screen" />
+            <div className="card-feature-visual">
+              <CardVisual kind="target" scale={1.45} />
             </div>
             <Arrow />
           </CardLink>
@@ -325,11 +329,7 @@ export default function Home() {
             <div className="card-kind mono"><span className="idx">04</span><span>AGENT</span></div>
             <span className="card-name card-name--lg">Job Application Agent</span>
             <span className="serif card-serif card-serif--sm">An agent that handles the job search so you don't have to.</span>
-            <div className="card-steps mono">
-              <div><span className="ac">→</span> find relevant postings</div>
-              <div><span className="ac">→</span> tailor application materials</div>
-              <div><span className="ac">→</span> track status<span className="caret" /></div>
-            </div>
+            <CardVisual kind="jobs" scale={1.4} />
             <Tags tags={['AI Agents', 'LLM', 'Python']} />
             <Arrow />
           </CardLink>
@@ -340,7 +340,7 @@ export default function Home() {
               <div className="card-kind mono"><span className="idx">{p.num}</span><span>{p.kind}</span></div>
               <span className="card-name">{p.name}</span>
               <p className="card-blurb">{p.blurb}</p>
-              {p.extra}
+              <CardVisual kind={p.visual} scale={1.25} />
               <Tags tags={p.tags} />
               <Arrow />
             </CardLink>
@@ -370,9 +370,9 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <footer className="home-foot mono">
+        <footer className="site-foot mono">
           <span>© {now.getFullYear()} Andrew Nguyen · Irvine, CA</span>
-          <span className="home-build"><span className="now-dot" />build {__COMMIT__} · main</span>
+          <span className="home-build" title="it works on my machine."><span className="now-dot" />build {__COMMIT__} · main</span>
           <a href="#top" className="navlink" onClick={onAnchor('top')}>back to top ↑</a>
         </footer>
       </section>

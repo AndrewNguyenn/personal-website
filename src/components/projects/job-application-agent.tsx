@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom'
 import MermaidDiagram from '../MermaidDiagram'
 import type { ProjectMeta } from './index'
-import '../styles/ProjectPage.css'
+import ProjectLayout, { ProjectSection } from '../ProjectLayout'
 
 export const meta: ProjectMeta = {
   slug: 'job-application-agent',
@@ -49,15 +48,17 @@ flowchart LR
 
 export default function JobApplicationAgent() {
   return (
-    <article id="project-page">
-      <Link to="/projects" className="back-link">← Projects</Link>
-      <div className="project-page-header">
-        <h2>Job Application Agent</h2>
-        <p className="project-page-subtitle">
-          An agent that searches, filters, tailors, and applies — so the only thing left is the interview.
-        </p>
-      </div>
-      <div className="project-page-body">
+    <ProjectLayout
+      slug="job-application-agent"
+      num="04"
+      kind="AGENT"
+      title="Job Application Agent"
+      tagline="An agent that searches, filters, tailors, and applies — so the only thing left is the interview."
+      tags={meta.tags}
+      visual="jobs"
+      next={{ to: '/projects/alexa-expert-sdk', num: '03', kind: 'SDK · PLATFORM', name: 'Alexa Expert SDK', visual: 'browser' }}
+    >
+      <ProjectSection eyebrow="The problem" title="Every. Single. Time.">
         <p>
           Applying for jobs is one of those things that feels like it should take five minutes and
           somehow takes all day. You find a role, you upload your resume, and then the form asks
@@ -72,6 +73,9 @@ export default function JobApplicationAgent() {
           it. There's no judgment call in there — it's just execution. So I stopped doing it
           myself.
         </p>
+      </ProjectSection>
+
+      <ProjectSection eyebrow="Search" title="Dedupe, score, skip.">
         <p>
           Each session starts by loading the full history out of SQLite — every company, role, and
           URL already applied to — into memory. Then it searches LinkedIn across multiple role
@@ -80,6 +84,9 @@ export default function JobApplicationAgent() {
           gets skipped without ever reading the full posting.
         </p>
         <MermaidDiagram chart={DIAGRAM_SEARCH} />
+      </ProjectSection>
+
+      <ProjectSection eyebrow="Tailor & apply" title="A fresh resume for every role.">
         <p>
           For each role that makes the cut, it reads the job description, copies the LaTeX master
           resume fresh, and makes targeted edits — surfacing relevant bullets, echoing the JD's
@@ -90,6 +97,9 @@ export default function JobApplicationAgent() {
           snapshot per page, all fields in a single pass.
         </p>
         <MermaidDiagram chart={DIAGRAM_APPLY} />
+      </ProjectSection>
+
+      <ProjectSection eyebrow="Track" title="I don't poll for status — it comes to me.">
         <p>
           After each application, a row goes into SQLite — company, role, URL, ATS system, salary
           range, status. At the end of the session a Pushover notification lands on my phone
@@ -99,11 +109,14 @@ export default function JobApplicationAgent() {
           summary. I don't poll for status — it comes to me.
         </p>
         <MermaidDiagram chart={DIAGRAM_TRACK} />
+      </ProjectSection>
+
+      <ProjectSection eyebrow="The point" title="I just prepare for the conversations.">
         <p>
           The whole point is that I'm not spending mental energy on logistics anymore. The agent
           handles the pipeline. I just prepare for the conversations.
         </p>
-      </div>
-    </article>
+      </ProjectSection>
+    </ProjectLayout>
   )
 }

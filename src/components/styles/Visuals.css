@@ -1,0 +1,761 @@
+/* Looping card illustrations (ShowcaseVisuals.tsx). Each draws inside a
+   222×150 well. Colors are themeable; defaults are the showcase's warm palette. */
+
+.v-root {
+  --clay: #e0784a;
+  --card-ink: #f7eee6;
+  --v-hi: #f2b36b;
+  --v-off: #2a201a;
+  --v-hex: #3a2c25;
+  --v-dim: #5a4a40;
+  --v-muted: #a88a78;
+  --v-node: #2b1f19;
+  --v-node-ink: #dcc6b6;
+
+  position: absolute;
+  inset: 0;
+}
+
+.v-caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  background: var(--clay);
+  vertical-align: -0.12em;
+  margin-left: 3px;
+  animation: v-blink 1.05s steps(1) infinite;
+}
+
+@keyframes v-blink { 50% { opacity: 0; } }
+
+
+@keyframes v-spin  { to { transform: rotate(360deg); } }
+@keyframes v-throb { 50% { opacity: 0.55; } }
+
+.v-caption,
+.v-region,
+.v-cal-label,
+.v-jobs-caption,
+.v-group-label,
+.v-now-label {
+  font-family: var(--n-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
+/* Lighting: fixtures sweeping their beams */
+
+.v-fixtures {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 8px;
+}
+
+.v-fixture {
+  position: relative;
+  width: 22px;
+  height: 150px;
+}
+
+.v-lamp {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 14px;
+  height: 9px;
+  border-radius: 3px;
+  background: #6b5448;
+}
+
+.v-beam {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 60px;
+  height: 140px;
+  margin-left: -30px;
+  transform-origin: 50% 0;
+  clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
+  animation: v-sway 4s ease-in-out infinite, v-glow 2.4s ease-in-out infinite;
+}
+
+.v-beam-a { background: linear-gradient(to bottom, rgba(242, 179, 107, 0.95), rgba(242, 179, 107, 0)); }
+.v-beam-b { background: linear-gradient(to bottom, rgba(224, 120, 74, 0.95), rgba(224, 120, 74, 0)); animation-delay: -1.3s, -0.8s; }
+.v-beam-c { background: linear-gradient(to bottom, rgba(245, 225, 200, 0.95), rgba(245, 225, 200, 0)); animation-delay: -2.6s, -1.6s; }
+
+@keyframes v-sway {
+  0%, 100% { transform: rotate(-7deg); }
+  50% { transform: rotate(7deg); }
+}
+
+@keyframes v-glow {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+/* JPMorgan: React atom + pages migrating */
+
+.v-react {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+}
+
+.v-atom {
+  width: 88px;
+  height: 88px;
+  flex-shrink: 0;
+  animation: v-spin 16s linear infinite;
+
+  ellipse {
+    fill: none;
+    stroke: var(--clay);
+    stroke-width: 1.6;
+    opacity: 0.8;
+  }
+}
+
+.v-electron { fill: var(--card-ink); }
+
+.v-nucleus {
+  fill: var(--clay);
+  animation: v-throb 1.8s ease-in-out infinite;
+}
+
+.v-pages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  perspective: 300px;
+}
+
+.v-page {
+  height: 16px;
+  box-sizing: border-box;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: var(--v-off);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: v-flip 4s ease-in-out infinite;
+}
+
+.v-page-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--v-dim);
+  animation: v-migrate 4s infinite;
+}
+
+.v-page-check {
+  font-size: 9px;
+  color: #f2c94c;
+  opacity: 0;
+  animation: v-check 4s infinite;
+}
+
+@keyframes v-flip {
+  0%, 14% { transform: rotateX(0); }
+  24%, 100% { transform: rotateX(360deg); }
+}
+
+@keyframes v-migrate {
+  0%, 17% { background: var(--v-dim); }
+  22%, 86% { background: var(--clay); }
+  96%, 100% { background: var(--v-dim); }
+}
+
+@keyframes v-check {
+  0%, 18% { opacity: 0; transform: scale(0.4); }
+  26% { opacity: 1; transform: scale(1.4); }
+  32%, 86% { opacity: 1; transform: scale(1); }
+  96%, 100% { opacity: 0; }
+}
+
+/* AWS Wickr: EKS nodes lighting up in GovCloud */
+
+.v-pods {
+  position: absolute;
+  inset: 0;
+}
+
+.v-region {
+  position: absolute;
+  left: 12px;
+  top: 10px;
+}
+
+.v-hexes {
+  position: absolute;
+  left: 14px;
+  top: 30px;
+  display: grid;
+  grid-template-columns: repeat(6, 24px);
+  gap: 2px 4px;
+}
+
+.v-hex {
+  width: 24px;
+  height: 27px;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background: var(--v-hex);
+  animation: v-pod 2.6s ease-in-out infinite;
+}
+
+.v-hex--odd {
+  translate: 14px 0;
+}
+
+@keyframes v-pod {
+  0%, 100% { background: var(--v-hex); }
+  35% { background: var(--clay); }
+  50% { background: var(--v-hi); }
+  70% { background: var(--v-hex); }
+}
+
+.v-lock {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  width: 18px;
+  height: 18px;
+  animation: v-throb 2s ease-in-out infinite;
+
+  rect { fill: var(--clay); }
+  path { stroke: var(--clay); stroke-width: 1.6; }
+}
+
+/* Alexa AI: agent cursor filling a booking form */
+
+.v-browser {
+  position: absolute;
+  inset: 8px;
+  line-height: 1;
+  border-radius: 6px;
+  background: #efe6dc;
+  overflow: hidden;
+}
+
+.v-chrome {
+  height: 16px;
+  box-sizing: border-box;
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: #d9ccbf;
+
+  span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #b3a293;
+  }
+
+  i {
+    margin-left: 6px;
+    padding: 1px 6px;
+    border-radius: 6px;
+    background: #efe6dc;
+    font-family: var(--n-mono);
+    font-size: 7px;
+    font-style: normal;
+    color: #6b5448;
+  }
+}
+
+.v-form {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+}
+
+.v-field {
+  position: relative;
+  display: block;
+  width: 110px;
+  height: 13px;
+  box-sizing: border-box;
+  border-radius: 3px;
+  background: #fff;
+  border: 1px solid #d3c5b8;
+  overflow: hidden;
+}
+
+.v-field--short { width: 78px; }
+
+.v-fill {
+  position: absolute;
+  left: 3px;
+  top: 3.5px;
+  height: 4px;
+  width: 0;
+  border-radius: 2px;
+  background: #6b5448;
+}
+
+.v-fill-1 { animation: v-fill-1 6s infinite; }
+.v-fill-2 { animation: v-fill-2 6s infinite; }
+
+@keyframes v-fill-1 {
+  0%, 12% { width: 0; }
+  20%, 90% { width: 70%; }
+  97%, 100% { width: 0; }
+}
+
+@keyframes v-fill-2 {
+  0%, 26% { width: 0; }
+  33%, 90% { width: 60%; }
+  97%, 100% { width: 0; }
+}
+
+.v-slots {
+  display: flex;
+  gap: 4px;
+}
+
+.v-slot {
+  padding: 3px 5px;
+  border: 1px solid #d3c5b8;
+  border-radius: 3px;
+  background: #fff;
+  font-family: var(--n-mono);
+  font-size: 7.5px;
+  color: #6b5448;
+}
+
+.v-slot--pick { animation: v-pick 6s infinite; }
+
+@keyframes v-pick {
+  0%, 45% { background: #fff; color: #6b5448; border-color: #d3c5b8; }
+  48%, 90% { background: var(--clay); color: #fff; border-color: var(--clay); }
+  97%, 100% { background: #fff; color: #6b5448; border-color: #d3c5b8; }
+}
+
+.v-book {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 16px;
+  border-radius: 4px;
+  background: var(--v-node);
+  color: var(--card-ink);
+  font-family: var(--n-mono);
+  font-size: 7.5px;
+  animation: v-book 6s infinite;
+
+  span { grid-area: 1 / 1; }
+}
+
+.v-book-a { animation: v-book-a 6s infinite; }
+.v-book-b { opacity: 0; animation: v-book-b 6s infinite; }
+
+@keyframes v-book {
+  0%, 60% { background: var(--v-node); transform: none; }
+  62% { transform: scale(0.9); }
+  66%, 90% { background: #3f8f5a; transform: none; }
+  97%, 100% { background: var(--v-node); }
+}
+
+@keyframes v-book-a {
+  0%, 63% { opacity: 1; }
+  65%, 92% { opacity: 0; }
+  97%, 100% { opacity: 1; }
+}
+
+@keyframes v-book-b {
+  0%, 63% { opacity: 0; }
+  67%, 90% { opacity: 1; }
+  95%, 100% { opacity: 0; }
+}
+
+.v-cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 10px;
+  height: 14px;
+  animation: v-cursor 6s ease-in-out infinite;
+
+  path {
+    fill: #1a120d;
+    stroke: #fff;
+    stroke-width: 1;
+  }
+}
+
+@keyframes v-cursor {
+  0%        { transform: translate(172px, 112px); }
+  10%, 20%  { transform: translate(62px, 30px); }
+  25%, 33%  { transform: translate(46px, 50px); }
+  42%       { transform: translate(52px, 70px); }
+  45%       { transform: translate(52px, 70px) scale(0.8); }
+  48%       { transform: translate(52px, 70px); }
+  57%       { transform: translate(34px, 92px); }
+  61%       { transform: translate(34px, 92px) scale(0.8); }
+  64%, 88%  { transform: translate(34px, 92px); }
+  100%      { transform: translate(172px, 112px); }
+}
+
+/* ComfyUI: node graph flowing into a denoising output */
+
+.v-nodes {
+  position: absolute;
+  inset: 0;
+}
+
+.v-wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+
+  path {
+    fill: none;
+    stroke: var(--clay);
+    stroke-width: 1.5;
+    stroke-dasharray: 3 5;
+    animation: v-flow 0.8s linear infinite;
+  }
+}
+
+@keyframes v-flow { to { stroke-dashoffset: -8; } }
+
+.v-node {
+  position: absolute;
+  width: 52px;
+  height: 24px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  background: var(--v-node);
+  border: 1px solid var(--v-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--n-mono);
+  font-size: 8px;
+  color: var(--v-node-ink);
+}
+
+.v-node--mid {
+  width: 46px;
+  border-color: var(--clay);
+  animation: v-throb 1.6s ease-in-out infinite;
+}
+
+.v-output {
+  position: absolute;
+  left: 166px;
+  top: 46px;
+  width: 48px;
+  height: 60px;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid var(--v-dim);
+}
+
+.v-art {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(#f2b36b, #e8d5c4);
+  animation: v-sharpen 4s infinite;
+}
+
+.v-sun {
+  position: absolute;
+  left: 24px;
+  top: 10px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff3dc;
+}
+
+.v-hill {
+  position: absolute;
+  width: 50px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.v-hill-1 { left: -14px; top: 36px; background: #b85a33; }
+.v-hill-2 { left: 14px; top: 42px; background: #8e3b1d; }
+
+.v-noise {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: v-denoise 4s infinite;
+}
+
+@keyframes v-denoise {
+  0%, 10% { opacity: 1; }
+  65%, 90% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes v-sharpen {
+  0%, 10% { filter: blur(6px); }
+  65%, 90% { filter: blur(0); }
+  100% { filter: blur(6px); }
+}
+
+/* Schedule Portal: scan line reading shifts into the calendar */
+
+.v-cal {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.v-cal-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+
+  > span:not(.v-scan) {
+    height: 20px;
+    border-radius: 4px;
+    background: var(--v-off);
+  }
+}
+
+.v-cal-on { animation: v-shift 4s infinite; }
+
+@keyframes v-shift {
+  0%, 8% { background: var(--v-off); transform: scale(1); }
+  14% { background: var(--v-hi); transform: scale(1.25); }
+  20%, 85% { background: var(--clay); transform: scale(1); }
+  95%, 100% { background: var(--v-off); }
+}
+
+.v-scan {
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  height: 2px;
+  background: var(--v-hi);
+  box-shadow: 0 0 10px 2px var(--v-hi);
+  animation: v-scan 4s linear infinite;
+}
+
+@keyframes v-scan {
+  0% { top: -4px; opacity: 1; }
+  55% { top: 100%; opacity: 1; }
+  60%, 100% { top: 100%; opacity: 0; }
+}
+
+/* Job Application Agent: postings stamped and sent */
+
+.v-jobs {
+  position: absolute;
+  inset: 0;
+}
+
+.v-job {
+  position: absolute;
+  top: 26px;
+  left: 50%;
+  width: 124px;
+  height: 84px;
+  margin-left: -62px;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 6px;
+  background: #efe6dc;
+  box-shadow: 0 8px 16px -8px #000;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: v-job 4.5s infinite;
+}
+
+.v-job-logo {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: var(--clay);
+}
+
+.v-job-line {
+  height: 5px;
+  border-radius: 2px;
+  background: #b3a293;
+}
+
+.v-job-tags {
+  display: flex;
+  gap: 3px;
+
+  i {
+    width: 18px;
+    height: 6px;
+    border-radius: 3px;
+    background: #d3c5b8;
+  }
+}
+
+.v-stamp {
+  position: absolute;
+  right: 8px;
+  top: 26px;
+  padding: 2px 5px;
+  border: 1.5px solid #3f8f5a;
+  border-radius: 3px;
+  font-family: var(--n-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #3f8f5a;
+  opacity: 0;
+  rotate: -12deg;
+  animation: v-stamp 4.5s infinite;
+}
+
+@keyframes v-job {
+  0%, 30%     { transform: translateY(-16px) scale(0.86); opacity: 0.45; z-index: 1; }
+  33.3%, 63%  { transform: translateY(-8px) scale(0.93); opacity: 0.75; z-index: 2; }
+  66.6%, 88%  { transform: none; opacity: 1; z-index: 3; }
+  97%         { transform: translateX(130px) rotate(14deg); opacity: 0; z-index: 3; }
+  97.1%       { transform: translateY(-16px) scale(0.86); opacity: 0; z-index: 1; }
+  100%        { transform: translateY(-16px) scale(0.86); opacity: 0.45; z-index: 1; }
+}
+
+@keyframes v-stamp {
+  0%, 72% { opacity: 0; scale: 2; }
+  77%, 94% { opacity: 1; scale: 1; }
+  97%, 100% { opacity: 0; }
+}
+
+.v-jobs-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 9px;
+  text-align: center;
+}
+
+/* BowPress: arrows grouping on a WA target */
+
+.v-target-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.v-target {
+  width: 120px;
+  height: 120px;
+}
+
+.v-hit {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: v-land 4.8s infinite;
+
+  circle {
+    fill: #1a120d;
+    stroke: var(--card-ink);
+    stroke-width: 0.8;
+  }
+}
+
+@keyframes v-land {
+  0% { opacity: 0; transform: scale(3); }
+  6% { opacity: 1; transform: scale(0.8); }
+  10%, 80% { opacity: 1; transform: scale(1); }
+  90%, 100% { opacity: 0; }
+}
+
+.v-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.v-group-ring {
+  width: 34px;
+  height: 34px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 1.5px dashed var(--clay);
+  animation: v-tighten 4.8s ease-in-out infinite, v-spin 6s linear infinite;
+}
+
+@keyframes v-tighten {
+  0%, 10% { scale: 1.3; }
+  75%, 85% { scale: 0.55; }
+  100% { scale: 1.3; }
+}
+
+/* Coinbase: current role over a self-drawing chart */
+
+.v-now {
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: var(--n-mono);
+  color: var(--card-ink);
+}
+
+.v-spark {
+  position: absolute;
+  left: 16px;
+  top: 30px;
+  width: calc(100% - 32px);
+  height: 44px;
+
+  path {
+    fill: none;
+    stroke: var(--clay);
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 400;
+    animation: v-draw 4.5s ease-out infinite;
+  }
+}
+
+@keyframes v-draw {
+  0% { stroke-dashoffset: 400; }
+  60%, 90% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+.v-now-year {
+  position: relative;
+  font-size: 38px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v-root *,
+  .v-root *::before,
+  .v-root *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -10,6 +10,8 @@ import Reading from './components/Reading'
 import Notes from './components/Notes'
 import NotePage from './components/NotePage'
 import ProjectPage from './components/ProjectPage'
+import EasterEggs from './components/EasterEggs'
+import NotFound from './components/NotFound'
 
 function NotePageWrapper() {
   const { slug } = useParams<{ slug: string }>()
@@ -45,17 +47,20 @@ function AnimatedRoutes() {
         <Route path="/notes" element={<Notes />} />
         <Route path="/notes/:slug" element={<NotePageWrapper />} />
         <Route path="/projects/:slug" element={<ProjectPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   )
 }
 
-// Home and Showcase bring their own nav and footer.
-const BARE_ROUTES = ['/', '/showcase']
+// Pages not yet redesigned keep the old header and footer; every other page
+// (home, showcase, project details, 404) brings its own.
+const isLegacyPage = (pathname: string) =>
+  ['/projects', '/reading', '/notes'].includes(pathname) || pathname.startsWith('/notes/')
 
 function Shell() {
   const { pathname } = useLocation()
-  const bare = BARE_ROUTES.includes(pathname)
+  const bare = !isLegacyPage(pathname)
   return (
     <>
       {!bare && <Header />}
@@ -63,6 +68,7 @@ function Shell() {
         <AnimatedRoutes />
       </main>
       {!bare && <Footer />}
+      <EasterEggs />
     </>
   )
 }

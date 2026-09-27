@@ -20,6 +20,12 @@ body.sand {
   letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
   user-select: none;
+  animation: sc-enter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Fade up into place on arrival. */
+@keyframes sc-enter {
+  from { opacity: 0; transform: translateY(70px); }
 }
 
 /* ── Atmosphere ───────────────────────────────────────────────────────────── */
@@ -184,10 +190,6 @@ body.sand {
   animation: sc-blink 1.05s steps(1) infinite;
 }
 
-.sc-caret--ac {
-  color: var(--clay);
-}
-
 @keyframes sc-blink { 50% { opacity: 0; } }
 
 /* ── Cards ────────────────────────────────────────────────────────────────── */
@@ -285,132 +287,13 @@ body.sand {
   color: #e2cfc1;
 }
 
-/* Visual variants */
+/* Card visuals are in Visuals.css */
 
 .sc-shot {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 14%;
-}
-
-.sc-term {
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  font-family: var(--n-mono);
-  font-size: 10.5px;
-  line-height: 1.8;
-  color: #dcc6b6;
-
-  span {
-    white-space: pre;
-  }
-}
-
-.sc-term-caret {
-  color: var(--clay);
-}
-
-.sc-cal {
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.sc-cal-label {
-  font-family: var(--n-mono);
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  color: #a88a78;
-}
-
-.sc-cal-grid {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 5px;
-
-  span {
-    height: 20px;
-    border-radius: 4px;
-  }
-}
-
-.sc-cal-on { background: var(--clay); }
-.sc-cal-off { background: #2a201a; }
-
-.sc-fixtures {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: space-around;
-  padding: 0 8px;
-}
-
-.sc-fixture {
-  position: relative;
-  width: 22px;
-  height: 150px;
-}
-
-.sc-lamp {
-  position: absolute;
-  left: 4px;
-  top: 4px;
-  width: 14px;
-  height: 9px;
-  border-radius: 3px;
-  background: #6b5448;
-}
-
-.sc-beam {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  width: 60px;
-  height: 140px;
-  margin-left: -30px;
-  transform-origin: 50% 0;
-  clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
-  animation: sc-sway 4s ease-in-out infinite, sc-glow 2.4s ease-in-out infinite;
-}
-
-.sc-beam-a { background: linear-gradient(to bottom, rgba(242, 179, 107, 0.95), rgba(242, 179, 107, 0)); }
-.sc-beam-b { background: linear-gradient(to bottom, rgba(224, 120, 74, 0.95), rgba(224, 120, 74, 0)); animation-delay: -1.3s, -0.8s; }
-.sc-beam-c { background: linear-gradient(to bottom, rgba(245, 225, 200, 0.95), rgba(245, 225, 200, 0)); animation-delay: -2.6s, -1.6s; }
-
-@keyframes sc-sway {
-  0%, 100% { transform: rotate(-7deg); }
-  50% { transform: rotate(7deg); }
-}
-
-@keyframes sc-glow {
-  0%, 100% { opacity: 0.55; }
-  50% { opacity: 1; }
-}
-
-.sc-now {
-  height: 100%;
-  box-sizing: border-box;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  font-family: var(--n-mono);
-  color: var(--card-ink);
-}
-
-.sc-now-label {
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  color: #a88a78;
-}
-
-.sc-now-year {
-  font-size: 38px;
-  font-weight: 500;
-  letter-spacing: -0.03em;
 }
 
 /* ── Chrome: header and controls ──────────────────────────────────────────── */

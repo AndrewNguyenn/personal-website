@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom'
 import MermaidDiagram from '../MermaidDiagram'
 import type { ProjectMeta } from './index'
-import '../styles/ProjectPage.css'
+import ProjectLayout, { ProjectSection } from '../ProjectLayout'
 
 export const meta: ProjectMeta = {
   slug: 'alexa-expert-sdk',
@@ -38,13 +37,17 @@ flowchart LR
 
 export default function AlexaExpertSDK() {
   return (
-    <article id="project-page">
-      <Link to="/projects" className="back-link">← Projects</Link>
-      <div className="project-page-header">
-        <h2>Alexa Expert SDK & Developer Platform</h2>
-        <p className="project-page-subtitle">Natural-language SDK for third-party services to integrate with Alexa</p>
-      </div>
-      <div className="project-page-body">
+    <ProjectLayout
+      slug="alexa-expert-sdk"
+      num="03"
+      kind="SDK · PLATFORM"
+      title="Alexa Expert SDK & Developer Platform"
+      tagline="Natural-language SDK for third-party services to integrate with Alexa"
+      tags={meta.tags}
+      visual="browser"
+      next={{ to: '/projects/bowpress', num: '05', kind: 'iOS APP', name: 'BowPress', visual: 'target' }}
+    >
+      <ProjectSection eyebrow="The premise" title="A customer asks Alexa to book a plumber.">
         <p>
           The premise was straightforward: a customer asks Alexa to book a plumber, and Alexa
           handles everything — finding a provider, navigating the booking flow, and confirming the
@@ -54,6 +57,9 @@ export default function AlexaExpertSDK() {
           Agent — a long-running workflow that takes over from there.
         </p>
         <MermaidDiagram chart={DIAGRAM_ROUTING} />
+      </ProjectSection>
+
+      <ProjectSection eyebrow="The agent" title="Context first, then the partner's website.">
         <p>
           The agent starts by checking the customer's account linking state and loading their
           metadata: prior requests, preferences, and whether they have an established relationship
@@ -63,6 +69,9 @@ export default function AlexaExpertSDK() {
           finds availability, and submits the booking request.
         </p>
         <MermaidDiagram chart={DIAGRAM_AGENT} />
+      </ProjectSection>
+
+      <ProjectSection eyebrow="Asynchronous by design" title="The conversation stays open until the job is scheduled.">
         <p>
           The response is asynchronous. Once the booking resolves, the agent persists the workflow
           state and pushes a notification back through Alexa. If the booking is confirmed, the
@@ -72,6 +81,9 @@ export default function AlexaExpertSDK() {
           end at the first response; it stays open until the job is actually scheduled.
         </p>
         <MermaidDiagram chart={DIAGRAM_OUTCOME} />
+      </ProjectSection>
+
+      <ProjectSection eyebrow="The SDK" title="Opening the pattern up to partners.">
         <p>
           On the Developer AI tech team, I built the <a href="https://developer.amazon.com/en-US/alexa/alexa-skills-kit/get-deeper/sdk" target="_blank" rel="noopener noreferrer">SDK</a> that made this pattern possible for
           external partners. Partners like Thumbtack and TaskRabbit could register their service
@@ -81,6 +93,9 @@ export default function AlexaExpertSDK() {
           The challenge was making that navigation general enough to work across structurally
           different partner surfaces while keeping the integration lightweight for the partner side.
         </p>
+      </ProjectSection>
+
+      <ProjectSection eyebrow="The platform" title="A working foundation for every new expert.">
         <p>
           The second piece was a developer platform built for the Alexa expert teams internally.
           Creating a new expert — a domain-specific skill — required solving the same
@@ -91,6 +106,9 @@ export default function AlexaExpertSDK() {
           actually needed: sitting with them, identifying where they were duplicating effort, and
           encoding the right abstractions without over-engineering the common case.
         </p>
+      </ProjectSection>
+
+      <ProjectSection eyebrow="Why it mattered" title="A shorter path to production.">
         <p>
           The two workstreams were connected by the same underlying goal — reduce the surface area
           between an idea for an Alexa capability and a working integration. For external partners,
@@ -98,7 +116,7 @@ export default function AlexaExpertSDK() {
           internal teams, that meant a platform that handled the complexity of standing up a new
           expert. Both were about making the path to production shorter.
         </p>
-      </div>
-    </article>
+      </ProjectSection>
+    </ProjectLayout>
   )
 }

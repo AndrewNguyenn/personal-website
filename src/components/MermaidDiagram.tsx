@@ -2,8 +2,7 @@ import { useEffect, useRef } from 'react'
 import mermaid from 'mermaid'
 import './styles/MermaidDiagram.css'
 
-const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-
+// Diagrams only appear on the project pages, which use the sand-and-clay palette.
 mermaid.initialize({
   startOnLoad: false,
   securityLevel: 'loose',
@@ -13,33 +12,19 @@ mermaid.initialize({
     htmlLabels: false,
     padding: 20,
   },
-  themeVariables: darkMode
-    ? {
-        primaryColor: '#1e2a3a',
-        primaryTextColor: '#e2e8f0',
-        primaryBorderColor: '#c4692a',
-        lineColor: '#c4692a',
-        secondaryColor: '#1a2535',
-        tertiaryColor: '#1a2535',
-        edgeLabelBackground: '#111827',
-        fontFamily: 'system-ui, Segoe UI, Roboto, sans-serif',
-        fontSize: '14px',
-        nodeBorder: '#c4692a',
-        clusterBkg: '#1a2535',
-      }
-    : {
-        primaryColor: '#f0ebe0',
-        primaryTextColor: '#2e1f0e',
-        primaryBorderColor: '#c4692a',
-        lineColor: '#c4692a',
-        secondaryColor: '#f5f0e8',
-        tertiaryColor: '#f5f0e8',
-        edgeLabelBackground: '#ffffff',
-        fontFamily: 'system-ui, Segoe UI, Roboto, sans-serif',
-        fontSize: '14px',
-        nodeBorder: '#c4692a',
-        clusterBkg: '#f5f0e8',
-      },
+  themeVariables: {
+    primaryColor: '#f3e7da',
+    primaryTextColor: '#2a1a12',
+    primaryBorderColor: '#e0784a',
+    lineColor: '#b85a33',
+    secondaryColor: '#efe3d6',
+    tertiaryColor: '#efe3d6',
+    edgeLabelBackground: '#f3e7da',
+    fontFamily: "'Geist Mono', ui-monospace, monospace",
+    fontSize: '13px',
+    nodeBorder: '#e0784a',
+    clusterBkg: '#efe3d6',
+  },
 })
 
 interface Props {

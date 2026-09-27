@@ -1,0 +1,364 @@
+/* Project detail pages (ProjectLayout.tsx). Tokens and atoms come from Site.css. */
+
+.pp {
+  min-height: 100svh;
+}
+
+/* ── Hero ─────────────────────────────────────────────────────────────────── */
+
+.pp-hero {
+  padding: 72px var(--gutter) 88px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
+  gap: 64px;
+  align-items: center;
+}
+
+.pp-hero-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.site .pp-back {
+  align-self: flex-start;
+  font-size: 13px;
+  color: var(--ink-3);
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--ink);
+  }
+}
+
+.pp-cmd {
+  font-size: 14px;
+  color: var(--ink-3);
+}
+
+.pp-cmd-text {
+  color: var(--ink);
+}
+
+.site .pp-hero h1 {
+  font-size: clamp(44px, 5.4vw, 80px);
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.site .pp-tagline {
+  margin: 0;
+  font-size: clamp(24px, 2.4vw, 32px);
+  line-height: 1.2;
+  color: var(--ac);
+}
+
+.pp-hero .card-tags {
+  margin-top: 4px;
+}
+
+.pp-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* The project's illustration, running large in a dark slab "screen". */
+.pp-screen {
+  background: var(--slab);
+  border: 1px solid var(--slab-line);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px -40px rgba(60, 20, 5, 0.55);
+  font-family: var(--n-mono);
+
+  .card-visual {
+    border: 0;
+    border-radius: 0;
+  }
+}
+
+/* ── Body ─────────────────────────────────────────────────────────────────── */
+
+.pp-body {
+  position: relative;
+  box-sizing: border-box;
+  width: calc(100% - 2 * var(--gutter));
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 8px 64px 16px;
+  background: rgba(242, 232, 221, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 24px;
+  box-shadow: 0 30px 60px -40px rgba(60, 20, 5, 0.45);
+}
+
+.pp-section {
+  padding: 48px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-bottom: 1px solid var(--line);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.site .pp-section h2 {
+  font-size: clamp(26px, 2.6vw, 36px);
+  line-height: 1.15;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.pp-prose {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  p {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--ink-2);
+  }
+
+  em {
+    font-family: var(--n-serif);
+    font-size: 1.12em;
+    color: var(--ink);
+  }
+
+  a {
+    color: var(--ac);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--ac) 40%, transparent);
+    text-underline-offset: 3px;
+
+    &:hover {
+      text-decoration-color: var(--ac);
+    }
+  }
+}
+
+/* Mermaid flow diagrams sit on a light card. */
+.pp .mermaid-wrap {
+  box-sizing: border-box;
+  padding: 28px 24px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.35);
+  overflow-x: auto;
+
+  .edgeLabel rect {
+    fill: #f3e7da !important;
+  }
+
+  .edgeLabel text {
+    fill: #2a1a12 !important;
+  }
+}
+
+/* Key / value / note rows (BowPress session spec). */
+.pp-spec {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.pp-spec-row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: baseline;
+  padding: 14px 20px;
+
+  & + & {
+    border-top: 1px solid var(--line);
+  }
+}
+
+.pp-spec-key,
+.pp-spec-meta {
+  font-family: var(--n-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.pp-spec-val {
+  font-size: 15px;
+  color: var(--ink);
+}
+
+/* Inline status stamps (BowPress tuning ledger, App Store status). */
+.pp-stamp {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid var(--line-2);
+  border-radius: 5px;
+  font-family: var(--n-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  vertical-align: 0.15em;
+}
+
+.pp-stamp--solid {
+  border-color: var(--clay);
+  background: var(--clay);
+  color: var(--on-clay);
+}
+
+.pp-stamp--good {
+  border-color: #6d8551;
+  color: #4a5f3a;
+}
+
+.pp-stamp--watch {
+  border-color: var(--ac);
+  color: var(--ac);
+}
+
+/* BowPress phone mockups: a horizontally scrolling (and draggable) row. */
+.pp .screenshot-row {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  padding: 8px 4px 18px;
+  margin: 0 -4px;
+  scroll-snap-type: x mandatory;
+  cursor: grab;
+
+  &.dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    user-select: none;
+  }
+}
+
+.pp .bp-phone-cell {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scroll-snap-align: start;
+}
+
+.pp .bp-phone {
+  box-shadow: 0 24px 48px -28px rgba(60, 20, 5, 0.55);
+}
+
+.pp .screenshot-caption {
+  padding-left: 8px;
+  font-family: var(--n-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ── Next project + footer ────────────────────────────────────────────────── */
+
+.pp-after {
+  padding: 80px var(--gutter) 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+.site .pp-next {
+  min-height: 0;
+  padding: 32px 36px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+
+  &:hover .pp-next-arrow {
+    transform: translateX(6px);
+  }
+}
+
+.pp-next-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pp-next-arrow {
+  display: inline-block;
+  color: var(--ac);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pp-next-visual {
+  width: 224px;
+  flex-shrink: 0;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+
+@media (max-width: 1100px) {
+  .pp-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+  }
+}
+
+@media (max-width: 760px) {
+  .pp-hero {
+    padding-top: 36px;
+    padding-bottom: 48px;
+  }
+
+  /* The large illustration is authored at 2×; shrink it to fit a phone. */
+  .pp-screen .card-visual {
+    height: 210px !important;
+  }
+
+  .pp-screen .card-visual-inner {
+    transform: scale(1.4) !important;
+  }
+
+  .pp-body {
+    width: calc(100% - 32px);
+    padding: 0 22px 8px;
+    border-radius: 18px;
+  }
+
+  .pp-section {
+    padding: 36px 0;
+  }
+
+  .pp-prose p {
+    font-size: 16px;
+  }
+
+  .pp-spec-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+
+  .site .pp-next {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 24px;
+  }
+
+  .pp-next-visual {
+    width: 100%;
+  }
+
+  .pp .mermaid-wrap {
+    padding: 18px 12px;
+  }
+}
